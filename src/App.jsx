@@ -79,7 +79,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="headerContainer">
-        <h1>Color Contrast Checker</h1>
+        <h1>Color Contrast Tool</h1>
         <IconButton
           onClick={toggleTheme}
           color="inherit"
