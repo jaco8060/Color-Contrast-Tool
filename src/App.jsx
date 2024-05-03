@@ -43,6 +43,25 @@ function App() {
       alert("Please select a valid colour that has not been added yet.");
     }
   };
+  const moveColourUp = (index) => {
+    if (index === 0) return; // Can't move the first element up
+    const newColours = [...colours];
+    [newColours[index], newColours[index - 1]] = [
+      newColours[index - 1],
+      newColours[index],
+    ];
+    setColours(newColours);
+  };
+
+  const moveColourDown = (index) => {
+    if (index === colours.length - 1) return; // Can't move the last element down
+    const newColours = [...colours];
+    [newColours[index], newColours[index + 1]] = [
+      newColours[index + 1],
+      newColours[index],
+    ];
+    setColours(newColours);
+  };
 
   const updateColour = (id, newHex) => {
     setColours(
@@ -70,12 +89,14 @@ function App() {
         </IconButton>
       </div>
       <div className="mainContainer">
-        {colours.map((colour) => (
+        {colours.map((colour, index) => (
           <ColourInput
             key={colour.id}
             initialColour={colour.hex}
             onColourChange={(newHex) => updateColour(colour.id, newHex)}
             onRemove={() => removeColour(colour.id)}
+            onMoveUp={() => moveColourUp(index)}
+            onMoveDown={() => moveColourDown(index)}
           />
         ))}
         <ColourInput addColour={addColour} />

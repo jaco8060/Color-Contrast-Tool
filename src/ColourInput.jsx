@@ -1,14 +1,17 @@
 import "./ColourInput.css"; // Adjust the path as needed if your CSS file is located elsewhere
 
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, IconButton, TextField } from "@mui/material";
 import { useState } from "react";
-
 function ColourInput({
   addColour,
   initialColour = "#ffffff",
   onColourChange,
   onRemove,
+  onMoveUp,
+  onMoveDown,
 }) {
   const [color, setColor] = useState(initialColour);
 
@@ -51,9 +54,17 @@ function ColourInput({
           Add Colour
         </Button>
       ) : (
-        <IconButton onClick={onRemove} color="secondary">
-          <DeleteIcon />
-        </IconButton>
+        <>
+          <IconButton onClick={onMoveUp} color="primary">
+            <ArrowUpwardIcon />
+          </IconButton>
+          <IconButton onClick={onMoveDown} color="primary">
+            <ArrowDownwardIcon />
+          </IconButton>
+          <IconButton onClick={onRemove} color="secondary">
+            <DeleteIcon />
+          </IconButton>
+        </>
       )}
     </form>
   );
