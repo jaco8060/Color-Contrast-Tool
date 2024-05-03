@@ -1,7 +1,7 @@
 import { useState } from "react";
+import tinycolor from "tinycolor2";
 import { ColourInput } from "./ColorInput";
 import { DisplayCombinations } from "./DisplayCombinations";
-
 function App() {
   const [colours, setColours] = useState([]);
 
