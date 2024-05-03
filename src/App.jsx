@@ -1,16 +1,15 @@
 import { useState } from "react";
-import tinycolor from "tinycolor2";
+// import tinycolor from "tinycolor2";
 import { ColourInput } from "./ColorInput";
 import { DisplayCombinations } from "./DisplayCombinations";
 function App() {
   const [colours, setColours] = useState([]);
 
   const addColour = (colour) => {
-    // Ensure that the colour is valid and not already in the list
-    if (tinycolor(colour).isValid() && !colours.includes(colour)) {
+    if (!colours.includes(colour) && /^#[0-9A-F]{6}$/i.test(colour)) {
       setColours([...colours, colour]);
     } else {
-      alert("Invalid colour or colour already added.");
+      alert("Please select a valid colour that has not been added yet.");
     }
   };
 
@@ -18,7 +17,7 @@ function App() {
     <div>
       <h1>Colour Palette Tester</h1>
       <ColourInput addColour={addColour} />
-      {colours.length > 1 && <DisplayCombinations colours={colours} />}
+      {colours.length > 0 && <DisplayCombinations colours={colours} />}
     </div>
   );
 }
