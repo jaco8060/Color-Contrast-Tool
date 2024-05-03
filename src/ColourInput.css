@@ -1,0 +1,23 @@
+/* ColourInput.css */
+.formContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  justify-content: center;
+}
+
+.colourInputGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.colorInput {
+  width: 150px; /* Width for the color picker input */
+}
+
+.hexInput {
+  width: 70px; /* Width for the hex code input */
+}

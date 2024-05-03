@@ -59,17 +59,17 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <div className="headerContainer">
+        <h1>Colour Contrast Checker</h1>
+        <IconButton
+          onClick={toggleTheme}
+          color="inherit"
+          aria-label="Toggle theme"
+        >
+          {themeMode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </div>
       <div className="mainContainer">
-        <div className="headerContainer">
-          <h1>Colour Palette Tester</h1>
-          <IconButton
-            onClick={toggleTheme}
-            color="inherit"
-            aria-label="Toggle theme"
-          >
-            {themeMode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-        </div>
         {colours.map((colour) => (
           <ColourInput
             key={colour.id}
