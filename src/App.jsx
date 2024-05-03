@@ -91,6 +91,7 @@ function App() {
       <div className="mainContainer">
         {colours.map((colour, index) => (
           <ColourInput
+            label={`Colour ${index + 1}:`}
             key={colour.id}
             initialColour={colour.hex}
             onColourChange={(newHex) => updateColour(colour.id, newHex)}

@@ -1,0 +1,81 @@
+.colourSectionContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.colourItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* margin-bottom: 10px; Adds space between items */
+  width: 100%; /* Ensures full container width */
+}
+
+.colourSection {
+  padding: 2px 5px; /* Reduced padding to allow more space for text */
+  border-radius: 10px;
+  height: 3rem;
+  display: flex;
+  align-items: center; /* Ensure text is centered vertically */
+}
+
+.colourMetrics {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align items horizontally in the column */
+  justify-content: center; /* Center vertically if there's extra space */
+  width: auto;
+  padding: 2px 5px; /* Narrower padding */
+  font-size: 1rem; /* Smaller font size for metrics text */
+}
+
+.colourMetrics div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.colourSectionText {
+  font-size: 1.5rem; /* Adjusted for better fit */
+  overflow: hidden; /* Prevents overflow */
+  text-overflow: ellipsis; /* Adds an ellipsis to overflowing text */
+  white-space: nowrap; /* Keeps text on one line */
+}
+
+.readableIcon,
+.notReadableIcon {
+  transition: transform 0.3s ease-in-out;
+}
+
+.readableIcon {
+  animation: popIn 0.3s ease;
+}
+
+.notReadableIcon {
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .colourSectionText {
+    font-size: 0.8rem;
+  }
+  .colourMetrics {
+    font-size: 0.7rem;
+  }
+}

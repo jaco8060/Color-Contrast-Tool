@@ -5,7 +5,9 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, IconButton, TextField } from "@mui/material";
 import { useState } from "react";
+
 function ColourInput({
+  label,
   addColour,
   initialColour = "#ffffff",
   onColourChange,
@@ -33,6 +35,7 @@ function ColourInput({
 
   return (
     <form onSubmit={handleSubmit} className="formContainer">
+      <span className="colorLabel">{label}</span>
       <TextField
         type="color"
         value={color}
