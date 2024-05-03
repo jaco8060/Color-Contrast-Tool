@@ -54,7 +54,7 @@ function ColourInput({
       />
       {addColour ? (
         <Button variant="contained" color="primary" type="submit">
-          Add Colour
+          Add Color
         </Button>
       ) : (
         <>

@@ -79,7 +79,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="headerContainer">
-        <h1>Colour Contrast Checker</h1>
+        <h1>Color Contrast Checker</h1>
         <IconButton
           onClick={toggleTheme}
           color="inherit"
@@ -91,7 +91,7 @@ function App() {
       <div className="mainContainer">
         {colours.map((colour, index) => (
           <ColourInput
-            label={`Colour ${index + 1}:`}
+            label={`Color ${index + 1}:`}
             key={colour.id}
             initialColour={colour.hex}
             onColourChange={(newHex) => updateColour(colour.id, newHex)}

@@ -1,7 +1,6 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Rating, Tooltip } from "@mui/material";
-// import React from "react";
 import tinycolor from "tinycolor2";
 import "./DisplayCombinations.css";
 
