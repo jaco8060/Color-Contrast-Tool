@@ -1,23 +1,35 @@
 import { useState } from "react";
-function ColourInput({ addColour }) {
-  const [inputColor, setInputColor] = useState("#ffffff"); // Default color
+function ColourInput({ addColour, initialColour = "#ffffff", onColourChange }) {
+  const [color, setColor] = useState(initialColour);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    addColour(inputColor);
+    if (addColour) {
+      addColour({ hex: color });
+    }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      style={{ display: "flex", alignItems: "center", gap: "10px" }}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+        marginBottom: "10px",
+      }}
     >
       <input
         type="color"
-        value={inputColor}
-        onChange={(e) => setInputColor(e.target.value)}
+        value={color}
+        onChange={(e) => {
+          setColor(e.target.value);
+          if (onColourChange) {
+            onColourChange(e.target.value);
+          }
+        }}
       />
-      <button type="submit">Add Colour</button>
+      {addColour && <button type="submit">Add Colour</button>}
     </form>
   );
 }
