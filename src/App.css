@@ -1,6 +1,13 @@
 .mainContainer {
+  padding: 20px;
+}
+
+.headerContainer {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  width: 50rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  margin: auto; /* Adjust according to your design needs */
 }

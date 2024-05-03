@@ -1,5 +1,11 @@
-import { Button, CssBaseline } from "@mui/material";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Brightness4Icon from "@mui/icons-material/Brightness4"; // Icon for dark mode
+import Brightness7Icon from "@mui/icons-material/Brightness7"; // Icon for light mode
+import {
+  CssBaseline,
+  IconButton,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import { useMemo, useState } from "react";
 import "./App.css";
 import { ColourInput } from "./ColourInput";
@@ -52,13 +58,18 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />{" "}
-      {/* Ensures that the background color covers the whole page */}
+      <CssBaseline />
       <div className="mainContainer">
-        <h1>Colour Palette Tester</h1>
-        <Button onClick={toggleTheme} variant="contained" color="primary">
-          Switch to {themeMode === "dark" ? "Light" : "Dark"} Mode
-        </Button>
+        <div className="headerContainer">
+          <h1>Colour Palette Tester</h1>
+          <IconButton
+            onClick={toggleTheme}
+            color="inherit"
+            aria-label="Toggle theme"
+          >
+            {themeMode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+        </div>
         {colours.map((colour) => (
           <ColourInput
             key={colour.id}
