@@ -1,6 +1,6 @@
 import { useState } from "react";
 // import tinycolor from "tinycolor2";
-import { ColourInput } from "./ColorInput";
+import { ColourInput } from "./ColourInput";
 import { DisplayCombinations } from "./DisplayCombinations";
 
 function App() {
@@ -28,6 +28,10 @@ function App() {
     );
   };
 
+  const removeColour = (id) => {
+    setColours(colours.filter((colour) => colour.id !== id));
+  };
+
   return (
     <div>
       <h1>Colour Palette Tester</h1>
@@ -36,6 +40,7 @@ function App() {
           key={colour.id}
           initialColour={colour.hex}
           onColourChange={(newHex) => updateColour(colour.id, newHex)}
+          onRemove={() => removeColour(colour.id)}
         />
       ))}
       <ColourInput addColour={addColour} />
@@ -45,4 +50,5 @@ function App() {
     </div>
   );
 }
+
 export default App;

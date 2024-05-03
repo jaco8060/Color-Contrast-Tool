@@ -1,5 +1,10 @@
 import { useState } from "react";
-function ColourInput({ addColour, initialColour = "#ffffff", onColourChange }) {
+function ColourInput({
+  addColour,
+  initialColour = "#ffffff",
+  onColourChange,
+  onRemove,
+}) {
   const [color, setColor] = useState(initialColour);
 
   const handleSubmit = (event) => {
@@ -29,8 +34,12 @@ function ColourInput({ addColour, initialColour = "#ffffff", onColourChange }) {
           }
         }}
       />
-      <span>{color.toUpperCase()}</span> {/* Display the hex code */}
-      {addColour && <button type="submit">Add Colour</button>}
+      <span>{color.toUpperCase()}</span>
+      {addColour ? (
+        <button type="submit">Add Colour</button>
+      ) : (
+        <button onClick={onRemove}>Remove</button>
+      )}
     </form>
   );
 }
