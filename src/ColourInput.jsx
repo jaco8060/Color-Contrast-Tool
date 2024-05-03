@@ -16,6 +16,7 @@ function ColourInput({
 
   return (
     <form
+      className="colourForm"
       onSubmit={handleSubmit}
       style={{
         display: "flex",
