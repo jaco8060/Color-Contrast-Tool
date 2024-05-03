@@ -1,40 +1,32 @@
 import tinycolor from "tinycolor2";
 
 function DisplayCombinations({ colours }) {
-  const isReadable = (textColour, bgColour) => {
-    // Default criteria is WCAG AA level with small text.
-    return tinycolor.isReadable(textColour, bgColour, {
-      level: "AA",
-      size: "small",
-    });
-  };
-
-  const getContrastRatio = (textColour, bgColour) => {
-    return tinycolor.readability(textColour, bgColour).toFixed(2);
-  };
+  const getContrastRatio = (textColor, bgColor) =>
+    tinycolor.readability(textColor, bgColor).toFixed(2);
+  const isReadable = (textColor, bgColor) =>
+    tinycolor.isReadable(textColor, bgColor, { level: "AA", size: "small" });
 
   return (
     <div>
-      {colours.map((textColour, index) => (
+      {colours.map((textColor, index) => (
         <div key={index}>
-          <h2 style={{ color: textColour }}>Text in {textColour}</h2>
           {colours
-            .filter((bgColour) => bgColour !== textColour)
-            .map((bgColour, bgIndex) => (
+            .filter((bgColor) => bgColor !== textColor)
+            .map((bgColor, bgIndex) => (
               <div
                 key={bgIndex}
                 style={{
-                  backgroundColor: bgColour,
-                  color: textColour,
+                  backgroundColor: bgColor,
+                  color: textColor,
                   padding: "10px",
                   margin: "5px",
                 }}
               >
-                Background: {bgColour}
+                Text: {textColor} on {bgColor}
                 <br />
-                Contrast Ratio: {getContrastRatio(textColour, bgColour)}
+                Contrast Ratio: {getContrastRatio(textColor, bgColor)}
                 <br />
-                Readability: {isReadable(textColour, bgColour) ? "Yes" : "No"}
+                Readability: {isReadable(textColor, bgColor) ? "Yes" : "No"}
               </div>
             ))}
         </div>
@@ -42,5 +34,4 @@ function DisplayCombinations({ colours }) {
     </div>
   );
 }
-
 export { DisplayCombinations };
