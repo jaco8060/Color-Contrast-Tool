@@ -29,6 +29,7 @@ function ColourInput({ addColour, initialColour = "#ffffff", onColourChange }) {
           }
         }}
       />
+      <span>{color.toUpperCase()}</span> {/* Display the hex code */}
       {addColour && <button type="submit">Add Colour</button>}
     </form>
   );
