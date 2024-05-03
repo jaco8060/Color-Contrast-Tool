@@ -10,7 +10,6 @@ Go to the website: [colorcontrasttool.netlify.app](https://colorcontrasttool.net
 
 1. To add a color to your palette click on the color input to select a color
 
-<<<<<<<<< Temporary merge branch 1
 ![Picking a color](src/assets/image1.png)
 
 2. Then press ADD COLOR to add selected color to the palette
