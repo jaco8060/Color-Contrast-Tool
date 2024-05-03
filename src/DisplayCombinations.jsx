@@ -43,4 +43,4 @@ function DisplayCombinations({ colours }) {
   );
 }
 
-export default DisplayCombinations;
+export { DisplayCombinations };

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import ColourInput from "./ColourInput";
-import DisplayCombinations from "./DisplayCombinations";
+import { ColourInput } from "./ColorInput";
+import { DisplayCombinations } from "./DisplayCombinations";
 
 function App() {
   const [colours, setColours] = useState([]);

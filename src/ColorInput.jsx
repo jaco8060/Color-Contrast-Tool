@@ -22,4 +22,4 @@ function ColourInput({ addColour }) {
   );
 }
 
-export default ColourInput;
+export { ColourInput };
