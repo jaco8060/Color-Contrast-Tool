@@ -21,3 +21,31 @@
 .hexInput {
   width: 70px; /* Width for the hex code input */
 }
+
+.colorLabel,
+.hexInput input,
+.colorInput input {
+  font-size: 16px; /* Default font size */
+}
+@media (max-width: 600px) {
+  .colorInput {
+    width: 60px; /* Width for the color picker input */
+  }
+
+  .colorLabel,
+  .hexInput input,
+  .colorInput input {
+    font-size: 14px; /* Smaller font size for smaller devices */
+  }
+
+  .formContainer .MuiIconButton-root,
+  .formContainer .MuiButton-root {
+    padding: 6px;
+    min-width: 36px; /* Reduce the size of buttons and icons */
+    font-size: 0.7rem; /* Smaller text on buttons if applicable */
+  }
+
+  .formContainer .MuiSvgIcon-root {
+    font-size: 18px; /* Smaller icon size */
+  }
+}

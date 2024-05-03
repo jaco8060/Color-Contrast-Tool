@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 5px;
 }
 
 .colourItem {
@@ -12,6 +12,7 @@
   justify-content: center;
   /* margin-bottom: 10px; Adds space between items */
   width: 100%; /* Ensures full container width */
+  gap: 2px;
 }
 
 .colourSection {
@@ -20,6 +21,7 @@
   height: 3rem;
   display: flex;
   align-items: center; /* Ensure text is centered vertically */
+  min-width: 38.5rem;
 }
 
 .colourMetrics {
@@ -72,10 +74,18 @@
 }
 
 @media (max-width: 600px) {
-  .colourSectionText {
-    font-size: 0.8rem;
+  .colourSection {
+    min-width: 15rem;
   }
+
+  .colourSectionText {
+    font-size: 0.65rem;
+    overflow: hidden; /* Prevents overflow */
+    text-overflow: ellipsis; /* Adds an ellipsis to overflowing text */
+    white-space: wrap; /* Keeps text on one line */
+  }
+
   .colourMetrics {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
   }
 }
