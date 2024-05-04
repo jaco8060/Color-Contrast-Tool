@@ -5,10 +5,10 @@ import tinycolor from "tinycolor2";
 import "./DisplayCombinations.css";
 
 function DisplayCombinations({ colours }) {
-  const getContrastRatio = (textColor, bgColor) =>
-    tinycolor.readability(textColor, bgColor).toFixed(2);
-  const isReadable = (textColor, bgColor) =>
-    tinycolor.isReadable(textColor, bgColor, { level: "AA", size: "small" });
+  const getContrastRatio = (bgColor, textColor) =>
+    tinycolor.readability(bgColor, textColor).toFixed(2);
+  const isReadable = (bgColor, textColor) =>
+    tinycolor.isReadable(bgColor, textColor, { level: "AA", size: "small" });
 
   const getRating = (contrastRatio) => {
     if (contrastRatio >= 7) return 5; // AAA for normal text
@@ -20,11 +20,11 @@ function DisplayCombinations({ colours }) {
 
   return (
     <div className="colourSectionContainer">
-      {colours.map((textColor, index) =>
+      {colours.map((bgColor, index) =>
         colours
-          .filter((bgColor) => bgColor !== textColor)
-          .map((bgColor, bgIndex) => (
-            <div key={bgIndex} className="colourItem">
+          .filter((textColor) => textColor !== bgColor)
+          .map((textColor, textIndex) => (
+            <div key={textIndex} className="colourItem">
               <div
                 className="colourSection"
                 style={{
@@ -33,20 +33,20 @@ function DisplayCombinations({ colours }) {
                 }}
               >
                 <h1 className="colourSectionText">
-                  Text Color: {textColor} on Background Color: {bgColor}
+                  Background Color: {bgColor} with Text Color: {textColor}
                 </h1>
               </div>
               <div className="colourMetrics">
                 <div>
-                  Contrast: {getContrastRatio(textColor, bgColor)}
+                  Contrast: {getContrastRatio(bgColor, textColor)}
                   <Tooltip
                     title={
-                      isReadable(textColor, bgColor)
+                      isReadable(bgColor, textColor)
                         ? "Readable"
                         : "Not Readable"
                     }
                   >
-                    {isReadable(textColor, bgColor) ? (
+                    {isReadable(bgColor, textColor) ? (
                       <CheckCircleIcon
                         className="readableIcon"
                         color="success"
@@ -58,13 +58,13 @@ function DisplayCombinations({ colours }) {
                 </div>
                 <Tooltip
                   title={`Contrast Ratio: ${getContrastRatio(
-                    textColor,
-                    bgColor
+                    bgColor,
+                    textColor
                   )}`}
                 >
                   <Rating
                     name="read-only"
-                    value={getRating(getContrastRatio(textColor, bgColor))}
+                    value={getRating(getContrastRatio(bgColor, textColor))}
                     readOnly
                     sx={{ fontSize: { xs: "1rem", sm: "1.25rem" } }} // Responsive font size
                   />
