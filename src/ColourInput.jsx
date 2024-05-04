@@ -6,6 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { Button, IconButton, TextField } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 
 function ColourInput({
@@ -21,6 +22,7 @@ function ColourInput({
   isSticky,
 }) {
   const [color, setColor] = useState(initialColour);
+  const theme = useTheme(); // Access the theme
 
   const handleColorChange = (event) => {
     const newColor = event.target.value;
@@ -42,6 +44,11 @@ function ColourInput({
     <form
       onSubmit={handleSubmit}
       className={`formContainer ${isSticky ? "sticky" : ""}`}
+      style={{
+        backgroundColor: isSticky
+          ? theme.palette.background.paper
+          : "transparent",
+      }}
       // set the form to be sticky if lock is selected
     >
       {!addColour && (

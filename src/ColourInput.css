@@ -32,7 +32,6 @@
   position: sticky;
   top: 0;
   z-index: 1000; /* Make sure it's above other content */
-  background-color: transparent; /* Background to overlay content */
 }
 
 @media (max-width: 600px) {
