@@ -40,7 +40,7 @@ function App() {
         { hex: newColour.hex, id: new Date().getTime() },
       ]);
     } else {
-      alert("Please select a valid colour that has not been added yet.");
+      alert("Please select a valid color that has not been added yet.");
     }
   };
   const moveColourUp = (index) => {
