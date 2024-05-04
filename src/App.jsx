@@ -108,7 +108,10 @@ function App() {
     );
   };
 
-  const removeColour = (id) => {
+  const removeColour = (id, index) => {
+    if (stickyIndex === index) {
+      setStickyIndex(null); // Unstick if the deleted color input is sticky
+    }
     setColours(colours.filter((colour) => colour.id !== id));
   };
 
@@ -137,7 +140,7 @@ function App() {
             key={colour.id}
             initialColour={colour.hex}
             onColourChange={(newHex) => updateColour(colour.id, newHex)}
-            onRemove={() => removeColour(colour.id)}
+            onRemove={() => removeColour(colour.id, index)}
             onMoveUp={() => moveColourUp(index)}
             onMoveDown={() => moveColourDown(index)}
             onToggleSticky={() => toggleSticky(index)}
