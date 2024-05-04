@@ -64,6 +64,7 @@ function App() {
   const resetColours = () => {
     console.log("Resetting colours...");
     setColours([]); // Clear the colours state
+    setStickyIndex(null); //Clear the sticky state
   };
 
   const addColour = (newColour) => {
