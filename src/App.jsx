@@ -10,6 +10,7 @@ import { useMemo, useState } from "react";
 import "./App.css";
 import { ColourInput } from "./ColourInput";
 import { DisplayCombinations } from "./DisplayCombinations";
+import ImageColorExtractor from "./ImageColorExtractor"; // Import the new component
 
 function App() {
   const [themeMode, setThemeMode] = useState("dark"); // Default to dark mode
@@ -89,6 +90,7 @@ function App() {
         </IconButton>
       </div>
       <div className="mainContainer">
+        <ImageColorExtractor />
         {colours.map((colour, index) => (
           <ColourInput
             label={`Color ${index + 1}:`}
