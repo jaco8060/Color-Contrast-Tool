@@ -30,7 +30,7 @@
   align-items: start; /* Center align items horizontally in the column */
   justify-content: center; /* Center vertically if there's extra space */
   width: auto;
-  font-size: 1rem; /* Smaller font size for metrics text */
+  font-size: clamp(0.6rem, 1.5vw, 1rem);
 }
 
 .colourMetrics div {
@@ -72,11 +72,22 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .colourSection {
     min-width: 18rem;
   }
 
+  .colourSectionText {
+    font-size: clamp(0.5rem, 2.5vw, 2rem);
+    overflow: hidden; /* Prevents overflow */
+  }
+
+  .colourMetrics div {
+    width: 6rem;
+  }
+}
+
+@media (max-width: 480px) {
   .colourSectionText {
     font-size: 0.65rem;
     overflow: hidden; /* Prevents overflow */
@@ -86,9 +97,5 @@
 
   .colourMetrics {
     font-size: 0.6rem;
-  }
-
-  .colourMetrics div {
-    width: 6rem;
   }
 }

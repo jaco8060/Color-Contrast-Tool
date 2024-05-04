@@ -88,10 +88,24 @@ function ColourInput({
         </>
       ) : (
         <>
-          <IconButton onClick={onMoveUp} color="primary">
+          <IconButton
+            onClick={onMoveUp}
+            color="primary"
+            sx={{
+              minWidth: 0, // Overriding the minimum width
+              width: { xs: 15, sm: 20 }, // Responsive widths
+            }}
+          >
             <ArrowUpwardIcon />
           </IconButton>
-          <IconButton onClick={onMoveDown} color="primary">
+          <IconButton
+            onClick={onMoveDown}
+            color="primary"
+            sx={{
+              minWidth: 0, // Overriding the minimum width
+              width: { xs: 15, sm: 20 }, // Responsive widths
+            }}
+          >
             <ArrowDownwardIcon />
           </IconButton>
           <IconButton onClick={onRemove} color="secondary">
