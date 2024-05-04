@@ -26,6 +26,7 @@
 .hexInput input,
 .colorInput input {
   font-size: 16px; /* Default font size */
+  text-wrap: nowrap;
 }
 
 .sticky {
