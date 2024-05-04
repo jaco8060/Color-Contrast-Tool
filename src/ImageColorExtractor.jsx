@@ -1,51 +1,72 @@
 // ImageColorExtractor.jsx
+import { Button } from "@mui/material";
 import { Palette } from "color-thief-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CirclePicker } from "react-color";
-
+import "./ImageColorExtractor.css";
 function ImageColorExtractor({ onAddColor, onAddPalette }) {
   const [imageSrc, setImageSrc] = useState(null);
-
+  const fileInputRef = useRef(null); // Create a ref for the file input
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = () => setImageSrc(reader.result);
     reader.readAsDataURL(file);
   };
-
+  const handleButtonClick = () => {
+    fileInputRef.current.click(); // Trigger file input click when button is clicked
+  };
   return (
-    <div>
-      <input type="file" onChange={handleImageUpload} accept="image/*" />
-      {imageSrc && (
-        <img
-          src={imageSrc}
-          alt="Uploaded"
-          style={{ maxWidth: "100%", maxHeight: "300px" }}
+    <>
+      <div className="uploadImgContainer">
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={handleButtonClick}
+          className="uploadButton"
+        >
+          Upload Image
+        </Button>
+        {/* Hidden file input */}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleImageUpload}
+          accept="image/*"
+          style={{ display: "none" }} // Hide the file input
         />
-      )}
-      {imageSrc && (
-        <Palette src={imageSrc} colorCount={5} format="hex">
-          {({ data, loading, error }) => {
-            if (loading) return <p>Loading...</p>;
-            if (error) return <p>There was an error loading the image.</p>;
-            return (
-              <div>
-                <CirclePicker
-                  colors={data}
-                  circleSize={28}
-                  circleSpacing={14}
-                  onSwatchHover={(color, event) => event.stopPropagation()} // Prevent hover events
-                  onChangeComplete={(color) => onAddColor(color.hex)} // Add selected color to state
-                />
-                <button onClick={() => onAddPalette(data)}>
-                  Export Palette
-                </button>
-              </div>
-            );
-          }}
-        </Palette>
-      )}
-    </div>
+        {/* Material-UI button that triggers the file input */}
+        {imageSrc && (
+          <>
+            <img src={imageSrc} alt="Uploaded" />
+            <Palette src={imageSrc} colorCount={5} format="hex">
+              {({ data, loading, error }) => {
+                if (loading) return <p>Loading...</p>;
+                if (error) return <p>There was an error loading the image.</p>;
+                return (
+                  <div className="inputGroup">
+                    <CirclePicker
+                      colors={data}
+                      circleSize={33}
+                      circleSpacing={8}
+                      onChangeComplete={(color) => onAddColor(color.hex)} // Add selected color to state
+                    />
+
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => onAddPalette(data)} // Directly use the onReset prop
+                    >
+                      Export Palette
+                    </Button>
+                  </div>
+                );
+              }}
+            </Palette>
+          </>
+        )}
+      </div>
+    </>
   );
 }
 

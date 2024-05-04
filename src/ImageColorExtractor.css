@@ -1,0 +1,38 @@
+.uploadImgContainer {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+.uploadButton {
+  width: 200px;
+  justify-self: center;
+}
+
+.inputGroup {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.inputGroup span {
+  justify-self: center;
+}
+
+.uploadImgContainer img {
+  grid-row: 2/3;
+  max-width: 90%; /* Allows the image to be responsive based on container size */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Media query for larger screens */
+@media (min-width: 768px) {
+  .uploadImgContainer img {
+    max-width: 500px; /* Fixed max width on larger screens */
+  }
+}
