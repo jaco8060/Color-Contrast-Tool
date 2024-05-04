@@ -12,7 +12,7 @@
   justify-content: center;
   /* margin-bottom: 10px; Adds space between items */
   width: 100%; /* Ensures full container width */
-  gap: 2px;
+  gap: 5px;
 }
 
 .colourSection {
@@ -27,18 +27,17 @@
 .colourMetrics {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center align items horizontally in the column */
+  align-items: start; /* Center align items horizontally in the column */
   justify-content: center; /* Center vertically if there's extra space */
   width: auto;
-  padding: 2px 5px; /* Narrower padding */
   font-size: 1rem; /* Smaller font size for metrics text */
 }
 
 .colourMetrics div {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+  width: 8.7rem;
 }
 
 .colourSectionText {
@@ -75,17 +74,21 @@
 
 @media (max-width: 600px) {
   .colourSection {
-    min-width: 15rem;
+    min-width: 18rem;
   }
 
   .colourSectionText {
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     overflow: hidden; /* Prevents overflow */
-    /* text-overflow: ellipsis; Adds an ellipsis to overflowing text */
+
     white-space: wrap; /* Wraps text if too long */
   }
 
   .colourMetrics {
     font-size: 0.6rem;
+  }
+
+  .colourMetrics div {
+    width: 6rem;
   }
 }

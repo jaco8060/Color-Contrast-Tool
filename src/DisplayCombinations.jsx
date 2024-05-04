@@ -39,7 +39,12 @@ const DisplayCombinationItem = memo(({ bgColor, textColor }) => {
           </Tooltip>
         </div>
         <Tooltip title={`Contrast Ratio: ${contrastRatio}`}>
-          <Rating name="read-only" value={getRating(contrastRatio)} readOnly />
+          <Rating
+            name="read-only"
+            value={getRating(contrastRatio)}
+            readOnly
+            sx={{ fontSize: { xs: "1rem", sm: "1.25rem" } }}
+          />
         </Tooltip>
       </div>
     </div>
