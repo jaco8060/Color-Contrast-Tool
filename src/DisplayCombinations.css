@@ -79,10 +79,10 @@
   }
 
   .colourSectionText {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     overflow: hidden; /* Prevents overflow */
-    text-overflow: ellipsis; /* Adds an ellipsis to overflowing text */
-    white-space: wrap; /* Keeps text on one line */
+    /* text-overflow: ellipsis; Adds an ellipsis to overflowing text */
+    white-space: wrap; /* Wraps text if too long */
   }
 
   .colourMetrics {
