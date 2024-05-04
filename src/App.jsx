@@ -10,10 +10,11 @@ import { useMemo, useState } from "react";
 import "./App.css";
 import { ColourInput } from "./ColourInput";
 import { DisplayCombinations } from "./DisplayCombinations";
-import ImageColorExtractor from "./ImageColorExtractor"; // Import the new component
+import ImageColorExtractor from "./ImageColorExtractor";
 
 function App() {
   const [themeMode, setThemeMode] = useState("dark"); // Default to dark mode
+  const [colours, setColours] = useState([]);
 
   const theme = useMemo(
     () =>
@@ -29,7 +30,25 @@ function App() {
     setThemeMode(themeMode === "dark" ? "light" : "dark");
   };
 
-  const [colours, setColours] = useState([]);
+  const addColoursFromPalette = (palette) => {
+    const newColours = palette.filter(
+      (color) => !colours.some((col) => col.hex === color)
+    );
+    setColours((prevColours) => [
+      ...prevColours,
+      ...newColours.map((hex) => ({ hex, id: new Date().getTime() + hex })),
+    ]);
+  };
+  const addPaletteColour = (color) => {
+    if (!colours.some((colour) => colour.hex === color)) {
+      setColours((prevColours) => [
+        ...prevColours,
+        { hex: color, id: new Date().getTime() + color },
+      ]);
+    } else {
+      alert("This color has already been added.");
+    }
+  };
 
   const addColour = (newColour) => {
     if (
@@ -44,6 +63,7 @@ function App() {
       alert("Please select a valid color that has not been added yet.");
     }
   };
+
   const moveColourUp = (index) => {
     if (index === 0) return; // Can't move the first element up
     const newColours = [...colours];
@@ -90,7 +110,11 @@ function App() {
         </IconButton>
       </div>
       <div className="mainContainer">
-        <ImageColorExtractor />
+        <ImageColorExtractor
+          onAddColor={addPaletteColour}
+          onAddPalette={addColoursFromPalette}
+        />
+
         {colours.map((colour, index) => (
           <ColourInput
             label={`Color ${index + 1}:`}
