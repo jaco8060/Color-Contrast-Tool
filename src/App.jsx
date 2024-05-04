@@ -16,6 +16,7 @@ import ImageColorExtractor from "./ImageColorExtractor";
 function App() {
   const [themeMode, setThemeMode] = useState("dark"); // Default to dark mode
   const [colours, setColours] = useState([]);
+  const [stickyIndex, setStickyIndex] = useState(null); // New state to track sticky form
 
   const theme = useMemo(
     () =>
@@ -29,6 +30,14 @@ function App() {
 
   const toggleTheme = () => {
     setThemeMode(themeMode === "dark" ? "light" : "dark");
+  };
+
+  const toggleSticky = (index) => {
+    if (stickyIndex === index) {
+      setStickyIndex(null); // Unstick if the same index is clicked again
+    } else {
+      setStickyIndex(index); // Stick the new index
+    }
   };
 
   const addColoursFromPalette = (palette) => {
@@ -131,6 +140,8 @@ function App() {
             onRemove={() => removeColour(colour.id)}
             onMoveUp={() => moveColourUp(index)}
             onMoveDown={() => moveColourDown(index)}
+            onToggleSticky={() => toggleSticky(index)}
+            isSticky={stickyIndex === index}
           />
         ))}
 

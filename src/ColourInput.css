@@ -27,6 +27,14 @@
 .colorInput input {
   font-size: 16px; /* Default font size */
 }
+
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Make sure it's above other content */
+  background-color: transparent; /* Background to overlay content */
+}
+
 @media (max-width: 600px) {
   .colorInput {
     width: 60px; /* Width for the color picker input */

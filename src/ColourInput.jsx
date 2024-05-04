@@ -3,6 +3,8 @@ import "./ColourInput.css"; // Adjust the path as needed if your CSS file is loc
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import DeleteIcon from "@mui/icons-material/Delete";
+import LockIcon from "@mui/icons-material/Lock";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { Button, IconButton, TextField } from "@mui/material";
 import { useState } from "react";
 
@@ -15,6 +17,8 @@ function ColourInput({
   onMoveUp,
   onMoveDown,
   onReset,
+  onToggleSticky,
+  isSticky,
 }) {
   const [color, setColor] = useState(initialColour);
 
@@ -35,7 +39,16 @@ function ColourInput({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="formContainer">
+    <form
+      onSubmit={handleSubmit}
+      className={`formContainer ${isSticky ? "sticky" : ""}`}
+      // set the form to be sticky if lock is selected
+    >
+      {!addColour && (
+        <IconButton onClick={onToggleSticky} color="default">
+          {isSticky ? <LockIcon /> : <LockOpenIcon />}
+        </IconButton>
+      )}
       <span className="colorLabel">{label}</span>
       <TextField
         type="color"
