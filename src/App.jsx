@@ -1,6 +1,7 @@
 import Brightness4Icon from "@mui/icons-material/Brightness4"; // Icon for dark mode
 import Brightness7Icon from "@mui/icons-material/Brightness7"; // Icon for light mode
 import {
+  Button,
   CssBaseline,
   IconButton,
   ThemeProvider,
@@ -48,6 +49,12 @@ function App() {
     } else {
       alert("This color has already been added.");
     }
+  };
+
+  //clear the colours state array
+  const resetColours = () => {
+    console.log("Resetting colours...");
+    setColours([]); // Clear the colours state
   };
 
   const addColour = (newColour) => {
@@ -126,7 +133,9 @@ function App() {
             onMoveDown={() => moveColourDown(index)}
           />
         ))}
-        <ColourInput addColour={addColour} />
+
+        <ColourInput addColour={addColour} onReset={() => resetColours()} />
+
         {colours.length > 1 && (
           <DisplayCombinations colours={colours.map((col) => col.hex)} />
         )}

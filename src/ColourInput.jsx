@@ -14,6 +14,7 @@ function ColourInput({
   onRemove,
   onMoveUp,
   onMoveDown,
+  onReset,
 }) {
   const [color, setColor] = useState(initialColour);
 
@@ -53,9 +54,18 @@ function ColourInput({
         className="hexInput"
       />
       {addColour ? (
-        <Button variant="contained" color="primary" type="submit">
-          Add Color
-        </Button>
+        <>
+          <Button variant="contained" color="primary" type="submit">
+            Add Color
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={onReset} // Directly use the onReset prop
+          >
+            Reset Colors
+          </Button>
+        </>
       ) : (
         <>
           <IconButton onClick={onMoveUp} color="primary">
