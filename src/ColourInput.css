@@ -49,7 +49,7 @@
 
   .formContainer .MuiIconButton-root,
   .formContainer .MuiButton-root {
-    padding: 4px 4px;
+    padding: 4px 8px;
     min-width: 20px; /* Reduce the size of buttons and icons */
     font-size: 0.7rem; /* Smaller text on buttons if applicable */
   }
