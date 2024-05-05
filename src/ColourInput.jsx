@@ -76,13 +76,23 @@ function ColourInput({
       />
       {addColour ? (
         <>
-          <Button variant="contained" color="primary" type="submit">
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            sx={{
+              whiteSpace: "nowrap",
+            }}
+          >
             Add Color
           </Button>
           <Button
             variant="contained"
             color="error"
             onClick={onReset} // Directly use the onReset prop
+            sx={{
+              whiteSpace: "nowrap",
+            }}
           >
             Reset Colors
           </Button>
@@ -97,7 +107,7 @@ function ColourInput({
               width: { xs: 15, sm: 20 }, // Responsive widths
             }}
           >
-            <ArrowUpwardIcon />
+            <ArrowUpwardIcon fontSize="inherit" />
           </IconButton>
           <IconButton
             onClick={onMoveDown}

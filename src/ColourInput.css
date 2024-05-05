@@ -61,7 +61,7 @@
 @media (max-width: 400px) {
   .formContainer .MuiIconButton-root,
   .formContainer .MuiButton-root {
-    padding: 4px 4px;
+    padding: 4px 6px;
     min-width: 16px; /* Reduce the size of buttons and icons */
     font-size: 0.7rem; /* Smaller text on buttons if applicable */
   }
