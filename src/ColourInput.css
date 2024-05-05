@@ -15,7 +15,7 @@
 }
 
 .colorInput {
-  width: 150px; /* Width for the color picker input */
+  width: 130px; /* Width for the color picker input */
 }
 
 .hexInput {
@@ -38,7 +38,7 @@
 
 @media (max-width: 600px) {
   .colorInput {
-    width: 60px; /* Width for the color picker input */
+    width: 90px; /* Width for the color picker input */
   }
 
   .colorLabel,
@@ -49,12 +49,23 @@
 
   .formContainer .MuiIconButton-root,
   .formContainer .MuiButton-root {
-    padding: 6px;
-    min-width: 36px; /* Reduce the size of buttons and icons */
+    padding: 4px 4px;
+    min-width: 20px; /* Reduce the size of buttons and icons */
     font-size: 0.7rem; /* Smaller text on buttons if applicable */
   }
 
   .formContainer .MuiSvgIcon-root {
     font-size: 18px; /* Smaller icon size */
+  }
+}
+@media (max-width: 400px) {
+  .formContainer .MuiIconButton-root,
+  .formContainer .MuiButton-root {
+    padding: 4px 4px;
+    min-width: 16px; /* Reduce the size of buttons and icons */
+    font-size: 0.7rem; /* Smaller text on buttons if applicable */
+  }
+  .colorInput {
+    width: 50px; /* Width for the color picker input */
   }
 }

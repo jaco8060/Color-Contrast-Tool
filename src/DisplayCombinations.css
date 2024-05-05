@@ -99,3 +99,17 @@
     font-size: 0.6rem;
   }
 }
+
+@media (max-width: 400px) {
+  .headerContainer h1 {
+    font-size: 28px;
+  }
+
+  .colourSection {
+    min-width: 15.5rem;
+  }
+
+  .colourSectionText {
+    font-size: 0.55rem;
+  }
+}

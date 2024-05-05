@@ -7,8 +7,8 @@ import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { Button, IconButton, TextField } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
 
+import { useState } from "react";
 function ColourInput({
   label,
   addColour,
@@ -57,6 +57,7 @@ function ColourInput({
         </IconButton>
       )}
       <span className="colorLabel">{label}</span>
+
       <TextField
         type="color"
         value={color}
