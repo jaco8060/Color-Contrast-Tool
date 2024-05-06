@@ -12,9 +12,21 @@
   padding: 1rem;
 }
 
-.headerContainer h1 {
+.headerContainer .title {
   margin: 0 auto 0 auto;
 }
+
+.subheadingTitle {
+  margin: 1rem auto;
+}
+
+.colorPairingOptions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
 @media (max-width: 400px) {
   .headerContainer h1 {
     font-size: 28px;

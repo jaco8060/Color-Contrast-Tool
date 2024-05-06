@@ -5,6 +5,7 @@ import {
   CssBaseline,
   IconButton,
   ThemeProvider,
+  Tooltip,
   createTheme,
 } from "@mui/material";
 import { useMemo, useState } from "react";
@@ -12,11 +13,14 @@ import "./App.css";
 import { ColourInput } from "./ColourInput";
 import { DisplayCombinations } from "./DisplayCombinations";
 import ImageColorExtractor from "./ImageColorExtractor";
+import SavedPalettes from "./SavedPalettes"; // Ensure the path is correct
 
 function App() {
   const [themeMode, setThemeMode] = useState("dark"); // Default to dark mode
   const [colours, setColours] = useState([]);
   const [stickyIndex, setStickyIndex] = useState(null); // New state to track sticky form
+  const [selectedCombinations, setSelectedCombinations] = useState([]); //new state to save selected combinations in a list
+  const [lastPaletteSave, setLastPaletteSave] = useState(Date.now());
 
   const theme = useMemo(
     () =>
@@ -63,8 +67,9 @@ function App() {
   //clear the colours state array
   const resetColours = () => {
     console.log("Resetting colours...");
-    setColours([]); // Clear the colours state
-    setStickyIndex(null); //Clear the sticky state
+    setColours([]);
+    setSelectedCombinations([]);
+    setStickyIndex(null);
   };
 
   const addColour = (newColour) => {
@@ -102,25 +107,101 @@ function App() {
   };
 
   const updateColour = (id, newHex) => {
+    // Find the old color value that is being updated.
+    const oldHex = colours.find((colour) => colour.id === id)?.hex;
+
+    // Update the colours array with the new hex value.
     setColours(
       colours.map((colour) =>
         colour.id === id ? { ...colour, hex: newHex } : colour
       )
     );
+
+    // Remove any selected combinations that include the old color
+    if (oldHex) {
+      setSelectedCombinations(
+        selectedCombinations.filter((combination) => {
+          const [bgColor, textColor] = combination.split("-");
+          return bgColor !== oldHex && textColor !== oldHex;
+        })
+      );
+    }
   };
 
   const removeColour = (id, index) => {
+    const colorToBeRemoved = colours.find((colour) => colour.id === id)?.hex;
+    if (!colorToBeRemoved) return;
+
     if (stickyIndex === index) {
       setStickyIndex(null); // Unstick if the deleted color input is sticky
     }
+    // Filter out the color from the colours list
     setColours(colours.filter((colour) => colour.id !== id));
+
+    // Also remove any combinations that involve this color
+    setSelectedCombinations(
+      selectedCombinations.filter((combination) => {
+        const [bgColor, textColor] = combination.split("-");
+        return bgColor !== colorToBeRemoved && textColor !== colorToBeRemoved;
+      })
+    );
   };
+
+  const handleToggleCombination = (bgColor, textColor, isChecked) => {
+    const combinationKey = `${bgColor}-${textColor}`;
+    setSelectedCombinations((prev) => {
+      const newCombinations = new Set(prev);
+      if (isChecked) {
+        newCombinations.add(combinationKey);
+      } else {
+        newCombinations.delete(combinationKey);
+      }
+      console.log(newCombinations);
+      return Array.from(newCombinations);
+    });
+  };
+
+  // Memoize the calculation of all combinations
+  const allCombinations = useMemo(() => {
+    return colours.flatMap((col1) =>
+      colours
+        .filter((col2) => col1.hex !== col2.hex)
+        .map((col2) => `${col1.hex}-${col2.hex}`)
+    );
+  }, [colours]);
+
+  // Memoize check if all combinations are currently selected
+  const allCombinationsSelected = useMemo(() => {
+    return allCombinations.every((combination) =>
+      selectedCombinations.includes(combination)
+    );
+  }, [selectedCombinations, allCombinations]);
+
+  // Function to toggle all combinations
+  const toggleAllCombinations = () => {
+    if (allCombinationsSelected) {
+      setSelectedCombinations([]);
+    } else {
+      setSelectedCombinations(allCombinations);
+    }
+  };
+  function savePalette() {
+    const palette = {
+      colors: colours,
+      combinations: selectedCombinations,
+      timestamp: new Date().toISOString(),
+    };
+    const existingPalettes = JSON.parse(localStorage.getItem("palettes")) || [];
+    existingPalettes.push(palette);
+    localStorage.setItem("palettes", JSON.stringify(existingPalettes));
+    setLastPaletteSave(Date.now()); // Update the timestamp to trigger refresh
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="headerContainer">
-        <h1>Color Contrast Tool</h1>
+        <h1 className="title">Color Contrast Tool</h1>
         <IconButton
           onClick={toggleTheme}
           color="inherit"
@@ -152,8 +233,34 @@ function App() {
         <ColourInput addColour={addColour} onReset={() => resetColours()} />
 
         {colours.length > 1 && (
-          <DisplayCombinations colours={colours.map((col) => col.hex)} />
+          <>
+            <h2 className="subheadingTitle">Color Pairings</h2>
+            <div className="colorPairingOptions">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={toggleAllCombinations}
+              >
+                {allCombinationsSelected ? "Unselect All" : "Select All"}
+              </Button>
+              <Tooltip title="Save palette and selected pairings" arrow>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={savePalette}
+                >
+                  Save Palette
+                </Button>
+              </Tooltip>
+            </div>
+            <DisplayCombinations
+              colours={colours.map((col) => col.hex)}
+              onToggleCombination={handleToggleCombination}
+              selectedCombinations={selectedCombinations}
+            />
+          </>
         )}
+        <SavedPalettes lastUpdate={lastPaletteSave} />
       </div>
     </ThemeProvider>
   );

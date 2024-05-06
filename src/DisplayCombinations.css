@@ -5,7 +5,14 @@
   justify-content: center;
   gap: 5px;
 }
-
+.colourItemContainer {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+.colourItemWrapper {
+  display: flex;
+}
 .colourItem {
   display: flex;
   align-items: center;
@@ -75,15 +82,27 @@
 @media (max-width: 768px) {
   .colourSection {
     min-width: 18rem;
+    width: 100%;
   }
 
   .colourSectionText {
-    font-size: clamp(0.5rem, 2.5vw, 2rem);
+    font-size: clamp(0.5rem, 2vw, 1rem);
     overflow: hidden; /* Prevents overflow */
   }
-
+  .colourItemContainer {
+    width: 100%;
+    gap: 5px;
+  }
   .colourMetrics div {
-    width: 6rem;
+    width: 6.2rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 600px) {
+  .colourMetrics div {
+    width: 5.2rem;
+    white-space: nowrap;
   }
 }
 
