@@ -21,6 +21,7 @@ function App() {
   const [stickyIndex, setStickyIndex] = useState(null); // New state to track sticky form
   const [selectedCombinations, setSelectedCombinations] = useState([]); //new state to save selected combinations in a list
   const [lastPaletteSave, setLastPaletteSave] = useState(Date.now());
+  const [currentPaletteIndex, setCurrentPaletteIndex] = useState(null);
 
   const theme = useMemo(
     () =>
@@ -191,17 +192,33 @@ function App() {
       combinations: selectedCombinations,
       timestamp: new Date().toISOString(),
     };
-    const existingPalettes = JSON.parse(localStorage.getItem("palettes")) || [];
-    existingPalettes.push(palette);
-    localStorage.setItem("palettes", JSON.stringify(existingPalettes));
-    setLastPaletteSave(Date.now()); // Update the timestamp to trigger refresh
+
+    let palettes = JSON.parse(localStorage.getItem("palettes")) || [];
+
+    if (
+      currentPaletteIndex !== null &&
+      palettes[currentPaletteIndex] &&
+      JSON.stringify(palettes[currentPaletteIndex].colors) ===
+        JSON.stringify(colours)
+    ) {
+      // Update existing palette
+      palettes[currentPaletteIndex].combinations = selectedCombinations;
+      palettes[currentPaletteIndex].timestamp = new Date().toISOString(); // Update the timestamp
+    } else {
+      // Add new palette
+      palettes.push(palette);
+      setCurrentPaletteIndex(palettes.length - 1); // Set current index to the new palette
+    }
+
+    localStorage.setItem("palettes", JSON.stringify(palettes));
+    setLastPaletteSave(Date.now());
   }
 
   // Load a palette from saved palettes
-  const loadPalette = (palette) => {
+  const loadPalette = (palette, index) => {
     setColours(palette.colors);
     setSelectedCombinations(palette.combinations);
-    // Reset other necessary states if needed
+    setCurrentPaletteIndex(index); // Set the currently active palette index
   };
 
   return (
@@ -270,6 +287,8 @@ function App() {
         <SavedPalettes
           lastUpdate={lastPaletteSave}
           onLoadPalette={loadPalette}
+          setCurrentPaletteIndex={setCurrentPaletteIndex}
+          currentPaletteIndex={currentPaletteIndex}
         />
       </div>
     </ThemeProvider>
