@@ -1,12 +1,17 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 import "./SavedPalettes.css";
 
 import { useEffect, useState } from "react";
 
-function SavedPalettes({ lastUpdate }) {
+function SavedPalettes({ lastUpdate, onLoadPalette }) {
   const [palettes, setPalettes] = useState([]);
 
   useEffect(() => {
@@ -35,6 +40,14 @@ function SavedPalettes({ lastUpdate }) {
               <strong>Selected Pairings: </strong>
               {palette.combinations.join(", ")}
             </div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => onLoadPalette(palette)}
+              style={{ marginTop: "10px" }}
+            >
+              Load This Palette
+            </Button>
           </AccordionDetails>
         </Accordion>
       ))}

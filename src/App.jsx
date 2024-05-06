@@ -197,6 +197,13 @@ function App() {
     setLastPaletteSave(Date.now()); // Update the timestamp to trigger refresh
   }
 
+  // Load a palette from saved palettes
+  const loadPalette = (palette) => {
+    setColours(palette.colors);
+    setSelectedCombinations(palette.combinations);
+    // Reset other necessary states if needed
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -260,7 +267,10 @@ function App() {
             />
           </>
         )}
-        <SavedPalettes lastUpdate={lastPaletteSave} />
+        <SavedPalettes
+          palettes={JSON.parse(localStorage.getItem("palettes")) || []}
+          onLoadPalette={loadPalette}
+        />
       </div>
     </ThemeProvider>
   );
