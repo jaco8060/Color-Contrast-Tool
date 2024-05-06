@@ -268,7 +268,7 @@ function App() {
           </>
         )}
         <SavedPalettes
-          palettes={JSON.parse(localStorage.getItem("palettes")) || []}
+          lastUpdate={lastPaletteSave}
           onLoadPalette={loadPalette}
         />
       </div>
