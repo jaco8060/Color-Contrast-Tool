@@ -26,6 +26,32 @@ function getContrastYIQ(hexcolor) {
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
   return yiq >= 128 ? "black" : "white";
 }
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const months = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+  ];
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const formattedHour = hours % 12 === 0 ? 12 : hours % 12;
+
+  return `${month}-${day}-${year} ${formattedHour}:${minutes}${ampm}`;
+}
 
 function PaletteDisplay({ palette }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -161,7 +187,7 @@ function SavedPalettes({
               id={`panel${index}a-header`}
             >
               <h3>
-                Palette {index + 1} - Saved on {palette.timestamp}
+                {palette.name} - Saved on {formatDate(palette.timestamp)}
               </h3>
             </AccordionSummary>
             <AccordionDetails>

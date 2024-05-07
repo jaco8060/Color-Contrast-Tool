@@ -4,8 +4,14 @@ import {
   Alert,
   Button,
   CssBaseline,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   Snackbar,
+  TextField,
   ThemeProvider,
   Tooltip,
   createTheme,
@@ -28,6 +34,8 @@ function App() {
   const [currentPaletteIndex, setCurrentPaletteIndex] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [paletteName, setPaletteName] = useState("");
 
   const theme = useMemo(
     () =>
@@ -220,6 +228,22 @@ function App() {
     setSnackbarOpen(false);
   };
 
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleSavePalette = () => {
+    const newPalette = new Palette(paletteName, colours, selectedCombinations);
+    newPalette.save();
+    setLastPaletteSave(Date.now());
+    setSnackbarMessage("Palette saved successfully!");
+    setSnackbarOpen(true);
+    handleCloseDialog();
+  };
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -270,11 +294,35 @@ function App() {
                 <Button
                   variant="contained"
                   color="success"
-                  onClick={savePalette}
+                  onClick={handleOpenDialog}
                 >
                   Save Palette
                 </Button>
               </Tooltip>
+              <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Name Your Palette</DialogTitle>
+                <DialogContent>
+                  <DialogContentText>
+                    Please enter a name for your new color palette.
+                  </DialogContentText>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Palette Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    value={paletteName}
+                    onChange={(e) => setPaletteName(e.target.value)}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseDialog}>Cancel</Button>
+                  <Button onClick={handleSavePalette}>Save</Button>
+                </DialogActions>
+              </Dialog>
+
               <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={3000}
