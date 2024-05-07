@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
+import Palette from "./Palette"; // Import the Palette class
 import "./SavedPalettes.css";
-
 //return white or black based on background color
 function getContrastYIQ(hexcolor) {
   hexcolor = hexcolor.replace("#", "");
@@ -127,27 +127,18 @@ function SavedPalettes({
   const [palettes, setPalettes] = useState([]);
 
   useEffect(() => {
-    const loadedPalettes = JSON.parse(localStorage.getItem("palettes")) || [];
-    setPalettes(loadedPalettes);
-  }, [lastUpdate]); // This will trigger a reload whenever a new palette is saved
+    loadPalettes();
+  }, [lastUpdate]);
 
   const loadPalettes = () => {
-    setPalettes(JSON.parse(localStorage.getItem("palettes")) || []);
+    setPalettes(Palette.getAllPalettes());
   };
 
-  const isStorageEmpty = () => {
-    return palettes.length === 0;
-  };
-
-  const deletePalette = (index) => {
-    let updatedPalettes = [...palettes];
-    updatedPalettes.splice(index, 1);
-    localStorage.setItem("palettes", JSON.stringify(updatedPalettes));
+  const deletePalette = (id) => {
+    Palette.delete(id);
     loadPalettes();
-    if (currentPaletteIndex === index) {
+    if (currentPaletteIndex === id) {
       setCurrentPaletteIndex(null); // Reset if the current palette is deleted
-    } else if (currentPaletteIndex > index) {
-      setCurrentPaletteIndex(currentPaletteIndex - 1); // Adjust the index if necessary
     }
   };
 
@@ -159,7 +150,7 @@ function SavedPalettes({
       ) : (
         palettes.map((palette, index) => (
           <Accordion
-            key={index}
+            key={palette.id}
             sx={{
               width: { xs: "20rem", sm: "38rem", md: "56rem", lg: "75rem" },
             }}
@@ -187,14 +178,14 @@ function SavedPalettes({
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => onLoadPalette(palette, index)}
+                  onClick={() => onLoadPalette(palette.id)}
                 >
                   Load This Palette
                 </Button>
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => deletePalette(index)}
+                  onClick={() => deletePalette(palette.id)}
                 >
                   Delete Palette
                 </Button>

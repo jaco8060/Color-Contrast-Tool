@@ -1,18 +1,22 @@
 import Brightness4Icon from "@mui/icons-material/Brightness4"; // Icon for dark mode
 import Brightness7Icon from "@mui/icons-material/Brightness7"; // Icon for light mode
 import {
+  Alert,
   Button,
   CssBaseline,
   IconButton,
+  Snackbar,
   ThemeProvider,
   Tooltip,
   createTheme,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+
+import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { ColourInput } from "./ColourInput";
 import { DisplayCombinations } from "./DisplayCombinations";
 import ImageColorExtractor from "./ImageColorExtractor";
+import Palette from "./Palette.jsx";
 import SavedPalettes from "./SavedPalettes"; // Ensure the path is correct
 
 function App() {
@@ -22,6 +26,8 @@ function App() {
   const [selectedCombinations, setSelectedCombinations] = useState([]); //new state to save selected combinations in a list
   const [lastPaletteSave, setLastPaletteSave] = useState(Date.now());
   const [currentPaletteIndex, setCurrentPaletteIndex] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const theme = useMemo(
     () =>
@@ -186,39 +192,32 @@ function App() {
       setSelectedCombinations(allCombinations);
     }
   };
-  function savePalette() {
-    const palette = {
-      colors: colours,
-      combinations: selectedCombinations,
-      timestamp: new Date().toISOString(),
-    };
 
-    let palettes = JSON.parse(localStorage.getItem("palettes")) || [];
-
-    if (
-      currentPaletteIndex !== null &&
-      palettes[currentPaletteIndex] &&
-      JSON.stringify(palettes[currentPaletteIndex].colors) ===
-        JSON.stringify(colours)
-    ) {
-      // Update existing palette
-      palettes[currentPaletteIndex].combinations = selectedCombinations;
-      palettes[currentPaletteIndex].timestamp = new Date().toISOString(); // Update the timestamp
-    } else {
-      // Add new palette
-      palettes.push(palette);
-      setCurrentPaletteIndex(palettes.length - 1); // Set current index to the new palette
-    }
-
-    localStorage.setItem("palettes", JSON.stringify(palettes));
+  // Function to save a new palette
+  const savePalette = () => {
+    const newPalette = new Palette(
+      "Palette Name",
+      colours,
+      selectedCombinations
+    );
+    newPalette.save();
     setLastPaletteSave(Date.now());
-  }
+    setSnackbarMessage("Palette saved successfully!");
+    setSnackbarOpen(true);
+  };
 
   // Load a palette from saved palettes
-  const loadPalette = (palette, index) => {
-    setColours(palette.colors);
-    setSelectedCombinations(palette.combinations);
-    setCurrentPaletteIndex(index); // Set the currently active palette index
+  const loadPalette = (id) => {
+    const loadedPalette = Palette.load(id);
+    if (loadedPalette) {
+      setColours(loadedPalette.colors);
+      setSelectedCombinations(loadedPalette.combinations);
+      setCurrentPaletteIndex(loadedPalette.id);
+    }
+  };
+  // Function to handle closing the snackbar
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -276,6 +275,20 @@ function App() {
                   Save Palette
                 </Button>
               </Tooltip>
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+              >
+                <Alert
+                  onClose={handleSnackbarClose}
+                  severity="success"
+                  sx={{ width: "100%" }}
+                >
+                  {snackbarMessage}
+                </Alert>
+              </Snackbar>
             </div>
             <DisplayCombinations
               colours={colours.map((col) => col.hex)}
