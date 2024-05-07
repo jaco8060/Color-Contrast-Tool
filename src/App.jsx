@@ -35,7 +35,8 @@ function App() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
-  const [paletteName, setPaletteName] = useState("");
+
+  let paletteName = "";
 
   const theme = useMemo(
     () =>
@@ -201,19 +202,6 @@ function App() {
     }
   };
 
-  // Function to save a new palette
-  const savePalette = () => {
-    const newPalette = new Palette(
-      "Palette Name",
-      colours,
-      selectedCombinations
-    );
-    newPalette.save();
-    setLastPaletteSave(Date.now());
-    setSnackbarMessage("Palette saved successfully!");
-    setSnackbarOpen(true);
-  };
-
   // Load a palette from saved palettes
   const loadPalette = (id) => {
     const loadedPalette = Palette.load(id);
@@ -229,13 +217,14 @@ function App() {
   };
 
   const handleOpenDialog = () => {
+    paletteName = "";
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
-
+  // Function to save a new palette
   const handleSavePalette = () => {
     const newPalette = new Palette(paletteName, colours, selectedCombinations);
     newPalette.save();
@@ -300,7 +289,21 @@ function App() {
                   Save Palette
                 </Button>
               </Tooltip>
-              <Dialog open={openDialog} onClose={handleCloseDialog}>
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                PaperProps={{
+                  component: "form",
+                  onSubmit: (event) => {
+                    event.preventDefault();
+                    const formData = new FormData(event.currentTarget);
+                    const formJson = Object.fromEntries(formData.entries());
+                    paletteName = formJson.paletteName;
+                    handleSavePalette();
+                    handleCloseDialog();
+                  },
+                }}
+              >
                 <DialogTitle>Name Your Palette</DialogTitle>
                 <DialogContent>
                   <DialogContentText>
@@ -310,17 +313,18 @@ function App() {
                     autoFocus
                     margin="dense"
                     id="name"
+                    name="paletteName"
                     label="Palette Name"
                     type="text"
                     fullWidth
                     variant="standard"
-                    value={paletteName}
-                    onChange={(e) => setPaletteName(e.target.value)}
+                    // value={paletteName}
+                    // onChange={(e) => setPaletteName(e.target.value)}
                   />
                 </DialogContent>
                 <DialogActions>
                   <Button onClick={handleCloseDialog}>Cancel</Button>
-                  <Button onClick={handleSavePalette}>Save</Button>
+                  <Button type="submit">Save</Button>
                 </DialogActions>
               </Dialog>
 
