@@ -17,7 +17,7 @@ import {
   createTheme,
 } from "@mui/material";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import "./App.css";
 import { ColourInput } from "./ColourInput";
 import { DisplayCombinations } from "./DisplayCombinations";

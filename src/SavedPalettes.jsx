@@ -11,7 +11,6 @@ import {
   IconButton,
   Snackbar,
   Tooltip,
-  Typography,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
@@ -92,11 +91,12 @@ function PaletteDisplay({ palette }) {
                 <div className="colorGroup">
                   <IconButton
                     className="copyIcon"
-                    sx={{ color: "inherit", display: "none" }}
+                    sx={{ color: "inherit", display: "none", padding: "0" }}
                   >
                     <ContentCopyIcon />
                   </IconButton>
                   <h3>{color.hex}</h3>
+                  <h4>{color.name}</h4>
                 </div>
               </div>
             </Tooltip>

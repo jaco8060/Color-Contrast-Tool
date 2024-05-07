@@ -1,3 +1,5 @@
+import { findNearestColor } from "./assets/colors.jsx";
+
 class Palette {
   constructor(
     name,
@@ -8,12 +10,21 @@ class Palette {
   ) {
     this.id = id;
     this.name = name;
-    this.colors = colors;
+    this.colors = this.assignColorNames(colors); // Assign names to each color
     this.combinations = combinations;
     this.timestamp = timestamp;
   }
 
+  // Assigns a name to each color based on its hex code using findNearestColor
+  assignColorNames(colors) {
+    return colors.map((color) => ({
+      ...color,
+      name: findNearestColor(color.hex).name, // Ensure findNearestColor returns an object with a `name` property
+    }));
+  }
+
   save() {
+    console.log("Saving palette with colors:", this.colors); // Check what's being saved
     const palettes = Palette.getAllPalettes();
     palettes.push(this); // Always add a new palette
     localStorage.setItem("palettes", JSON.stringify(palettes));
@@ -35,4 +46,5 @@ class Palette {
     localStorage.setItem("palettes", JSON.stringify(palettes));
   }
 }
+
 export default Palette;

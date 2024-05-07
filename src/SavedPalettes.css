@@ -40,15 +40,19 @@
 .colorGroup h3 {
   margin: 0;
 }
+.colorGroup h4 {
+  margin: 0;
+  font-size: 12px;
+}
 
 @media (min-width: 960px) {
   .paletteColor {
-    height: 150px; /* Large devices */
+    height: 170px; /* Large devices */
   }
 }
 @media (min-width: 600px) {
   .paletteColor {
-    height: 120px; /* Medium devices */
+    height: 150px; /* Medium devices */
   }
 }
 @media (max-width: 600px) {
