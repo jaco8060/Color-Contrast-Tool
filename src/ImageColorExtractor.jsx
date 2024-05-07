@@ -39,14 +39,15 @@ function ImageColorExtractor({ onAddColor, onAddPalette }) {
         {imageSrc && (
           <>
             <img src={imageSrc} alt="Uploaded" />
-            <Palette src={imageSrc} colorCount={5} format="hex">
+            <Palette src={imageSrc} colorCount={12} format="hex" quality={1}>
               {({ data, loading, error }) => {
                 if (loading) return <p>Loading...</p>;
                 if (error) return <p>There was an error loading the image.</p>;
+                const dataSet = [...new Set(data)];
                 return (
                   <div className="inputGroup">
                     <CirclePicker
-                      colors={data}
+                      colors={dataSet}
                       circleSize={33}
                       circleSpacing={8}
                       onChangeComplete={(color) => onAddColor(color.hex)} // Add selected color to state
@@ -55,7 +56,7 @@ function ImageColorExtractor({ onAddColor, onAddPalette }) {
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => onAddPalette(data)} // Directly use the onReset prop
+                      onClick={() => onAddPalette(dataSet)} // Directly use the onReset prop
                     >
                       Export Palette
                     </Button>
