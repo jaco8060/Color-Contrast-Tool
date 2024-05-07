@@ -237,14 +237,23 @@ function App() {
       <CssBaseline />
       <div className="headerContainer">
         <h1 className="title">Color Contrast Tool</h1>
-        <IconButton
-          onClick={toggleTheme}
-          color="inherit"
-          aria-label="Toggle theme"
-          className="toggleThemeIcon"
+        <Tooltip
+          title={
+            themeMode === "dark"
+              ? "Switch to light mode"
+              : "Switch to dark mode"
+          }
+          arrow
         >
-          {themeMode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton>
+          <IconButton
+            onClick={toggleTheme}
+            color="inherit"
+            aria-label="Toggle theme"
+            className="toggleThemeIcon"
+          >
+            {themeMode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+        </Tooltip>
       </div>
       <div className="mainContainer">
         <ImageColorExtractor
