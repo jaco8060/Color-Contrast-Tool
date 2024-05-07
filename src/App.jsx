@@ -217,7 +217,6 @@ function App() {
   };
 
   const handleOpenDialog = () => {
-    paletteName = "";
     setOpenDialog(true);
   };
 
@@ -298,7 +297,9 @@ function App() {
                     event.preventDefault();
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
-                    paletteName = formJson.paletteName;
+                    formJson.paletteName
+                      ? (paletteName = formJson.paletteName)
+                      : (paletteName = "Untitled");
                     handleSavePalette();
                     handleCloseDialog();
                   },
