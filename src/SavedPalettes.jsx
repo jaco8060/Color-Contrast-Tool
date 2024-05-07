@@ -161,7 +161,7 @@ function SavedPalettes({
           <Accordion
             key={index}
             sx={{
-              width: { xs: "20rem", sm: "40rem", md: "60rem", lg: "80rem" },
+              width: { xs: "20rem", sm: "38rem", md: "56rem", lg: "75rem" },
             }}
           >
             <AccordionSummary
