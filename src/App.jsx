@@ -253,6 +253,7 @@ function App() {
           onClick={toggleTheme}
           color="inherit"
           aria-label="Toggle theme"
+          className="toggleThemeIcon"
         >
           {themeMode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
         </IconButton>
