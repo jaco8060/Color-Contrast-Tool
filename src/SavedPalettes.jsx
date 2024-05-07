@@ -1,13 +1,122 @@
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
+  Box,
   Button,
+  Grid,
+  IconButton,
+  Snackbar,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
 import "./SavedPalettes.css";
+
+//return white or black based on background color
+function getContrastYIQ(hexcolor) {
+  hexcolor = hexcolor.replace("#", "");
+  const r = parseInt(hexcolor.substr(0, 2), 16);
+  const g = parseInt(hexcolor.substr(2, 2), 16);
+  const b = parseInt(hexcolor.substr(4, 2), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "black" : "white";
+}
+
+function PaletteDisplay({ palette }) {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const handleCopyColor = (color) => {
+    navigator.clipboard.writeText(color).then(() => {
+      setSnackbarMessage(`Copied ${color} to clipboard!`);
+      setSnackbarOpen(true);
+    });
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+  return (
+    <div>
+      <strong>Color palette:</strong>
+      <Grid container spacing={1} mb={2}>
+        {palette.colors.map((color, index) => (
+          <Grid item xs={6} sm={4} md={3} key={index} mt={1}>
+            <Tooltip title="Click to copy color" placement="top">
+              <div
+                style={{
+                  width: "100%",
+                  backgroundColor: color.hex,
+                  color: getContrastYIQ(color.hex),
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "relative",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.opacity = "0.75")}
+                onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
+                onClick={() => handleCopyColor(color.hex)}
+                className="paletteColor"
+              >
+                <div className="colorGroup">
+                  <IconButton
+                    className="copyIcon"
+                    sx={{ color: "inherit", display: "none" }}
+                  >
+                    <ContentCopyIcon />
+                  </IconButton>
+                  <h3>{color.hex}</h3>
+                </div>
+              </div>
+            </Tooltip>
+          </Grid>
+        ))}
+      </Grid>
+      <div className="colorCombos">
+        <strong>Selected Pairings:</strong>
+        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 1, mb: 2 }}>
+          {palette.combinations.map((combo, index) => {
+            const [bgColor, textColor] = combo.split("-");
+
+            return (
+              <Box key={index} sx={{ p: 0 }}>
+                <div
+                  style={{
+                    backgroundColor: bgColor,
+                    color: textColor,
+                    padding: "8px 16px",
+                    fontWeight: "600",
+                  }}
+                >
+                  {`Bg color: ${bgColor} with Txt color: ${textColor}`}
+                </div>
+              </Box>
+            );
+          })}
+        </Box>
+      </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </div>
+  );
+}
 
 function SavedPalettes({
   lastUpdate,
@@ -45,11 +154,16 @@ function SavedPalettes({
   return (
     <div className="savedPalettesContainer">
       <h2 className="subheadingTitle">Saved Palettes</h2>
-      {isStorageEmpty() ? (
+      {palettes.length === 0 ? (
         <p>No palettes saved yet.</p>
       ) : (
         palettes.map((palette, index) => (
-          <Accordion key={index}>
+          <Accordion
+            key={index}
+            sx={{
+              width: { xs: "20rem", sm: "40rem", md: "60rem", lg: "80rem" },
+            }}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls={`panel${index}a-content`}
@@ -60,30 +174,31 @@ function SavedPalettes({
               </h3>
             </AccordionSummary>
             <AccordionDetails>
-              <div>
-                <strong>Colors:</strong>{" "}
-                {palette.colors.map((color) => color.hex).join(", ")}
-              </div>
-              <div>
-                <strong>Selected Pairings:</strong>{" "}
-                {palette.combinations.join(", ")}
-              </div>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => onLoadPalette(palette, index)}
-                style={{ marginTop: "10px" }}
+              <PaletteDisplay palette={palette} />
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 2,
+                  mt: 2,
+                }}
               >
-                Load This Palette
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => deletePalette(index)}
-                style={{ marginTop: "10px", marginLeft: "10px" }}
-              >
-                Delete Palette
-              </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => onLoadPalette(palette, index)}
+                >
+                  Load This Palette
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => deletePalette(index)}
+                >
+                  Delete Palette
+                </Button>
+              </Box>
             </AccordionDetails>
           </Accordion>
         ))

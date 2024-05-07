@@ -4,3 +4,55 @@
   flex-direction: column;
   align-items: center;
 }
+
+.paletteColors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* Adjust the gap as needed */
+}
+
+.paletteColor {
+  flex: 0 0 calc(20% - 8px); /* Adjust the calculation based on the gap for 5 items per row */
+  height: 120px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.paletteColor:hover .copyIcon {
+  display: flex; /* Only display the icon when the parent is hovered */
+}
+
+.copyIcon {
+  position: absolute;
+  bottom: 10px; /* Position it at the bottom */
+  display: none; /* Hide by default */
+}
+.colorGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.colorGroup h3 {
+  margin: 0;
+}
+
+@media (min-width: 960px) {
+  .paletteColor {
+    height: 150px; /* Large devices */
+  }
+}
+@media (min-width: 600px) {
+  .paletteColor {
+    height: 120px; /* Medium devices */
+  }
+}
+@media (max-width: 600px) {
+  .paletteColor {
+    height: 120px; /* Smaller devices */
+  }
+}
