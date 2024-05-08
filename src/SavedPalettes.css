@@ -52,19 +52,37 @@
 .editPaletteLabel {
   margin: 0;
 }
+.css-eqpfi5-MuiAccordionSummary-content {
+  justify-content: space-between;
+}
+
+.css-eqpfi5-MuiAccordionSummary-content h3 {
+  margin: 0 0.5rem 0 0;
+}
 
 @media (min-width: 960px) {
   .paletteColor {
     height: 170px; /* Large devices */
   }
 }
-@media (min-width: 600px) {
+@media (max-width: 900px) {
+  .paletteColor {
+    height: 170px; /* Large devices */
+  }
+  .css-eqpfi5-MuiAccordionSummary-content h3 {
+    font-size: 15px;
+  }
   .paletteColor {
     height: 150px; /* Medium devices */
   }
 }
+
 @media (max-width: 600px) {
   .paletteColor {
     height: 120px; /* Smaller devices */
+  }
+  .css-eqpfi5-MuiAccordionSummary-content h3 {
+    font-size: 12px;
+    margin: 0 0.5rem 0 0;
   }
 }

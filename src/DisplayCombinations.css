@@ -78,10 +78,30 @@
     transform: scale(1);
   }
 }
+@media (max-width: 1000px) {
+  .colourSection {
+    width: 38rem;
+  }
+
+  .colourMetrics div {
+    width: 8rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 880px) {
+  .colourSection {
+    width: 38rem;
+  }
+
+  .colourMetrics div {
+    width: 6.4rem;
+    white-space: nowrap;
+  }
+}
 
 @media (max-width: 768px) {
   .colourSection {
-    min-width: 18rem;
     width: 100%;
   }
 

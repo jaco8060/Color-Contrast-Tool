@@ -304,7 +304,7 @@ function SavedPalettes({
       {palettes.length === 0 ? (
         <p>No palettes saved yet.</p>
       ) : (
-        palettes.map((palette, index) => (
+        [...palettes].reverse().map((palette, index) => (
           <Accordion
             key={palette.id}
             sx={{
@@ -315,12 +315,17 @@ function SavedPalettes({
               expandIcon={<ExpandMoreIcon />}
               aria-controls={`panel${index}a-content`}
               id={`panel${index}a-header`}
+              className="dropDownTitleContainer"
+              sx={{
+                justifyContent: "space-between",
+              }}
             >
               <h3>
                 {palette.name} -
-                {palette.themeName != "" && ` ${palette.themeName} theme - `}{" "}
-                Saved on {formatDate(palette.timestamp)}
+                {palette.themeName !== "" && ` ${palette.themeName} theme`}
               </h3>
+
+              <h3>{formatDate(palette.timestamp)}</h3>
             </AccordionSummary>
             <AccordionDetails>
               <PaletteDisplay
