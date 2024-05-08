@@ -32,13 +32,21 @@
 
 .sticky {
   position: sticky;
-  top: 0;
+  top: 68px;
   z-index: 1000; /* Make sure it's above other content */
 }
-
+@media (max-width: 900px) {
+  .sticky {
+    top: 64px;
+  }
+}
 @media (max-width: 600px) {
   .colorInput {
     width: 90px; /* Width for the color picker input */
+  }
+
+  .sticky {
+    top: 56px;
   }
 
   .colorLabel,
