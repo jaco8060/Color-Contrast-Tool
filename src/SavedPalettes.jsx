@@ -167,7 +167,7 @@ function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
           md={12}
           sx={{
             display: "flex",
-            justifyContent: { xs: "left", sm: "center" },
+            justifyContent: "center",
           }}
         >
           <Box
@@ -176,7 +176,6 @@ function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              alignContent: "center",
               gap: 2,
             }}
           >
@@ -195,7 +194,7 @@ function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: { xs: "left", sm: "center" },
+            alignItems: "center",
           }}
         >
           <Box sx={{ display: "flex", gap: 2, flexDirection: "column" }}>
