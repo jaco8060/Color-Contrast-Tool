@@ -52,11 +52,10 @@
 .editPaletteLabel {
   margin: 0;
 }
-.css-eqpfi5-MuiAccordionSummary-content {
+.MuiAccordionSummary-content {
   justify-content: space-between;
 }
-
-.css-eqpfi5-MuiAccordionSummary-content h3 {
+.MuiAccordionSummary-content h3 {
   margin: 0 0.5rem 0 0;
 }
 
@@ -69,7 +68,7 @@
   .paletteColor {
     height: 170px; /* Large devices */
   }
-  .css-eqpfi5-MuiAccordionSummary-content h3 {
+  .MuiAccordionSummary-content h3 {
     font-size: 15px;
   }
   .paletteColor {
@@ -81,7 +80,7 @@
   .paletteColor {
     height: 120px; /* Smaller devices */
   }
-  .css-eqpfi5-MuiAccordionSummary-content h3 {
+  .MuiAccordionSummary-content h3 {
     font-size: 12px;
     margin: 0 0.5rem 0 0;
   }
