@@ -52,7 +52,52 @@ function formatDate(dateString) {
 
   return `${month}-${day}-${year} ${formattedHour}:${minutes}${ampm}`;
 }
+const CooldownButton = ({ generateThemeName }) => {
+  const [isCooldown, setIsCooldown] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(10); // Cooldown time in seconds
 
+  useEffect(() => {
+    let timer;
+    if (isCooldown) {
+      timer = setInterval(() => {
+        setCooldownTime((prevTime) => {
+          if (prevTime > 1) {
+            return prevTime - 1;
+          }
+          clearInterval(timer);
+          setIsCooldown(false);
+          return 10; // Reset cooldown time for next use
+        });
+      }, 1000);
+    }
+
+    // Cleanup timer on component unmount or if the cooldown ends early
+    return () => clearInterval(timer);
+  }, [isCooldown]);
+
+  const handleButtonClick = async () => {
+    setIsCooldown(true); // Start cooldown
+    await generateThemeName();
+  };
+
+  return (
+    <Tooltip
+      placement="top"
+      arrow
+      title="Click to generate theme name based on color names powered by Gemini"
+    >
+      <Button
+        variant="outlined"
+        color="primary"
+        sx={{ width: "250px" }}
+        onClick={handleButtonClick}
+        disabled={isCooldown}
+      >
+        {isCooldown ? `Wait ${cooldownTime}s` : "Generate Theme Name (AI)"}
+      </Button>
+    </Tooltip>
+  );
+};
 function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -199,21 +244,8 @@ function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
         >
           <Box sx={{ display: "flex", gap: 2, flexDirection: "column" }}>
             <h5 className="editPaletteLabel">Edit palette theme</h5>
-            <Tooltip
-              placement="top"
-              arrow
-              title="Click to generate theme name based on color names powered by Gemini"
-            >
-              <Button
-                variant="outlined"
-                color="primary"
-                sx={{ width: "250px" }}
-                onClick={generateThemeName}
-              >
-                Generate Theme Name (AI)
-              </Button>
-            </Tooltip>
 
+            <CooldownButton generateThemeName={generateThemeName} />
             <TextField
               id="outlined-required"
               label="Current theme name"
@@ -221,6 +253,7 @@ function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
               onChange={handleThemeNameChange}
               sx={{ width: "250px" }}
             />
+
             <Button
               variant="outlined"
               color="success"
