@@ -12,13 +12,13 @@ import {
 } from "@mui/material";
 
 import { useMemo, useState } from "react";
+import tinycolor from "tinycolor2";
 import "./App.css";
 import { ColourInput } from "./ColourInput.jsx";
 import { DisplayCombinations } from "./DisplayCombinations.jsx";
 import ImageColorExtractor from "./ImageColorExtractor.jsx";
 import Palette from "./Palette.jsx";
 import SavedPalettes from "./SavedPalettes.jsx"; // Ensure the path is correct
-
 export default function ColorContrastTool() {
   const [colours, setColours] = useState([]);
   const [stickyIndex, setStickyIndex] = useState(null); // New state to track sticky form
@@ -172,17 +172,41 @@ export default function ColorContrastTool() {
 
   // Memoize check if all combinations are currently selected
   const allCombinationsSelected = useMemo(() => {
-    return allCombinations.every((combination) =>
+    const visibleCombinations = showOnlyReadable
+      ? allCombinations.filter((combination) => {
+          const [bgColor, textColor] = combination.split("-");
+          const readability = tinycolor.readability(bgColor, textColor);
+          return readability >= 4.5;
+        })
+      : allCombinations;
+
+    return visibleCombinations.every((combination) =>
       selectedCombinations.includes(combination)
     );
-  }, [selectedCombinations, allCombinations]);
+  }, [selectedCombinations, allCombinations, showOnlyReadable]);
 
   // Function to toggle all combinations
   const toggleAllCombinations = () => {
     if (allCombinationsSelected) {
       setSelectedCombinations([]);
     } else {
-      setSelectedCombinations(allCombinations);
+      if (showOnlyReadable) {
+        // Select only readable combinations
+        const readableCombinations = colours.flatMap((col1) =>
+          colours
+            .filter((col2) => col1.hex !== col2.hex)
+            .map((col2) => `${col1.hex}-${col2.hex}`)
+            .filter((combination) => {
+              const [bgColor, textColor] = combination.split("-");
+              const readability = tinycolor.readability(bgColor, textColor);
+              return readability >= 4.5;
+            })
+        );
+        setSelectedCombinations(readableCombinations);
+      } else {
+        // Select all combinations
+        setSelectedCombinations(allCombinations);
+      }
     }
   };
 
