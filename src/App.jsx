@@ -1,5 +1,3 @@
-import Brightness4Icon from "@mui/icons-material/Brightness4"; // Icon for dark mode
-import Brightness7Icon from "@mui/icons-material/Brightness7"; // Icon for light mode
 import {
   Alert,
   Button,
@@ -9,13 +7,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
   Snackbar,
   TextField,
   ThemeProvider,
   Tooltip,
   createTheme,
 } from "@mui/material";
+import ResponsiveAppBar from "./Appbar.jsx";
 
 import { useMemo, useState } from "react";
 import "./App.css";
@@ -233,26 +231,15 @@ function App() {
   };
   return (
     <ThemeProvider theme={theme}>
+      <div id="home"></div>
       <CssBaseline />
+      <ResponsiveAppBar
+        themeMode={themeMode}
+        toggleTheme={() => toggleTheme()}
+      />
+
       <div className="headerContainer">
         <h1 className="title">Color Contrast Tool</h1>
-        <Tooltip
-          title={
-            themeMode === "dark"
-              ? "Switch to light mode"
-              : "Switch to dark mode"
-          }
-          arrow
-        >
-          <IconButton
-            onClick={toggleTheme}
-            color="inherit"
-            aria-label="Toggle theme"
-            className="toggleThemeIcon"
-          >
-            {themeMode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
-          </IconButton>
-        </Tooltip>
       </div>
       <div className="mainContainer">
         <ImageColorExtractor
@@ -359,12 +346,14 @@ function App() {
             />
           </>
         )}
-        <SavedPalettes
-          lastUpdate={lastPaletteSave}
-          onLoadPalette={loadPalette}
-          setCurrentPaletteIndex={setCurrentPaletteIndex}
-          currentPaletteIndex={currentPaletteIndex}
-        />
+        <div id="saved-palettes">
+          <SavedPalettes
+            lastUpdate={lastPaletteSave}
+            onLoadPalette={loadPalette}
+            setCurrentPaletteIndex={setCurrentPaletteIndex}
+            currentPaletteIndex={currentPaletteIndex}
+          />
+        </div>
       </div>
     </ThemeProvider>
   );

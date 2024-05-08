@@ -10,18 +10,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  position: relative;
+  /* position: relative; */
 }
 
 .headerContainer .title {
   margin: 0 auto 0 auto;
   font-weight: 800;
   font-size: clamp(24px, 5vw, 40px);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  white-space: nowrap;
 }
 .toggleThemeIcon {
   position: absolute;

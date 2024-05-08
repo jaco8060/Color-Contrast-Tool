@@ -18,7 +18,7 @@ function ImageColorExtractor({ onAddColor, onAddPalette }) {
   };
   return (
     <>
-      <div className="uploadImgContainer">
+      <div id="home" className="uploadImgContainer">
         <Button
           variant="outlined"
           color="primary"

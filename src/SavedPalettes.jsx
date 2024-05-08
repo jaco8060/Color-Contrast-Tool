@@ -17,7 +17,6 @@ import { useEffect, useState } from "react";
 import Palette from "./Palette"; // Import the Palette class
 import "./SavedPalettes.css";
 import { generateTheme } from "./ThemeGen";
-import { colornames } from "./assets/colornames";
 //return white or black based on background color
 function getContrastYIQ(hexcolor) {
   hexcolor = hexcolor.replace("#", "");
