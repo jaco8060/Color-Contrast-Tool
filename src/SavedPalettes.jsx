@@ -321,8 +321,8 @@ function SavedPalettes({
               }}
             >
               <h3>
-                {palette.name} -
-                {palette.themeName !== "" && ` ${palette.themeName} theme`}
+                {palette.name}
+                {palette.themeName !== "" && ` - ${palette.themeName} theme`}
               </h3>
 
               <h3>{formatDate(palette.timestamp)}</h3>
