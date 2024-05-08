@@ -317,7 +317,9 @@ function SavedPalettes({
               id={`panel${index}a-header`}
             >
               <h3>
-                {palette.name} - Saved on {formatDate(palette.timestamp)}
+                {palette.name} -
+                {palette.themeName != "" && ` ${palette.themeName} theme - `}{" "}
+                Saved on {formatDate(palette.timestamp)}
               </h3>
             </AccordionSummary>
             <AccordionDetails>
