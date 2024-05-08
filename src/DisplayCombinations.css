@@ -12,13 +12,14 @@
 }
 .colourItemWrapper {
   display: flex;
+  width: 43.5rem;
 }
 .colourItem {
   display: flex;
   align-items: center;
   justify-content: center;
   /* margin-bottom: 10px; Adds space between items */
-  width: 100%; /* Ensures full container width */
+
   gap: 5px;
 }
 
@@ -82,7 +83,12 @@
   .colourSection {
     width: 38rem;
   }
-
+  .colourItemWrapper {
+    width: 41.5rem;
+  }
+  .colourSectionText {
+    font-size: 23px;
+  }
   .colourMetrics div {
     width: 8rem;
     white-space: nowrap;
@@ -90,27 +96,33 @@
 }
 
 @media (max-width: 880px) {
-  .colourSection {
-    width: 38rem;
+  .colourItemWrapper {
+    width: 33.5rem;
   }
-
+  .colourSection {
+    width: 30rem;
+  }
   .colourMetrics div {
-    width: 6.4rem;
+    width: 7rem;
     white-space: nowrap;
+  }
+  .colourSectionText {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 768px) {
-  .colourSection {
-    width: 100%;
+  .colourItemWrapper {
+    width: 30.5rem;
   }
-
+  .colourSection {
+    width: 27rem;
+  }
   .colourSectionText {
-    font-size: clamp(0.5rem, 2vw, 1rem);
+    font-size: 1rem;
     overflow: hidden; /* Prevents overflow */
   }
   .colourItemContainer {
-    width: 100%;
     gap: 5px;
   }
   .colourMetrics div {
@@ -120,6 +132,16 @@
 }
 
 @media (max-width: 600px) {
+  .colourItemWrapper {
+    width: 24rem;
+  }
+  .colourSectionText {
+    font-size: 0.8rem;
+  }
+  .colourSection {
+    width: 21.8rem;
+    height: 35px;
+  }
   .colourMetrics div {
     width: 5.2rem;
     white-space: nowrap;
@@ -129,9 +151,13 @@
 @media (max-width: 480px) {
   .colourSectionText {
     font-size: 0.65rem;
-    overflow: hidden; /* Prevents overflow */
-
-    white-space: wrap; /* Wraps text if too long */
+  }
+  .colourSection {
+    height: 30px;
+    width: 18rem;
+  }
+  .colourItemWrapper {
+    width: 20rem;
   }
 
   .colourMetrics {
@@ -140,15 +166,28 @@
 }
 
 @media (max-width: 400px) {
+  .colourSection {
+    width: 15rem;
+  }
+  .colourItemWrapper {
+    width: 17rem;
+  }
+  .colourSectionText {
+    font-size: 0.55rem;
+  }
+}
+@media (max-width: 360px) {
   .headerContainer h1 {
     font-size: 28px;
   }
-
   .colourSection {
-    min-width: 15.5rem;
+    width: 13.5rem;
+    height: 30px;
   }
-
+  .colourItemWrapper {
+    width: 15.5rem;
+  }
   .colourSectionText {
-    font-size: 0.55rem;
+    font-size: 0.48rem;
   }
 }

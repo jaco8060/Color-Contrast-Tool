@@ -116,7 +116,7 @@ function ResponsiveAppBar({ themeMode, toggleTheme }) {
               color: "inherit",
               textDecoration: "none",
               fontSize: {
-                xs: "16px",
+                xs: "14px",
                 sm: "20px",
                 md: "24px",
               },

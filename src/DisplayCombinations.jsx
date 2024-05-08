@@ -52,7 +52,12 @@ const DisplayCombinationItem = memo(
                   className="readableIcon"
                   color="success"
                   sx={{
-                    fontSize: { xs: "0.8rem", sm: "1rem", md: "1.5rem" },
+                    fontSize: {
+                      xs: "0.8rem",
+                      sm: "1.3rem",
+                      md: "1.5rem",
+                      lg: "1.5rem",
+                    },
                   }}
                 />
               ) : (
@@ -60,7 +65,12 @@ const DisplayCombinationItem = memo(
                   className="notReadableIcon"
                   color="error"
                   sx={{
-                    fontSize: { xs: "0.8rem", sm: "1rem", md: "1.5rem" },
+                    fontSize: {
+                      xs: "0.8rem",
+                      sm: "1.3rem",
+                      md: "1.5rem",
+                      lg: "1.5rem",
+                    },
                   }}
                 />
               )}
