@@ -52,11 +52,17 @@
 .editPaletteLabel {
   margin: 0;
 }
-.MuiAccordionSummary-content {
+
+.dropDownTitle {
+  display: flex;
   justify-content: space-between;
+  width: 100%;
+  margin: 0rem;
+  margin-right: 0.5rem;
 }
-.MuiAccordionSummary-content h3 {
-  margin: 0 0.5rem 0 0;
+.paletteNameTheme,
+.timeStamp {
+  margin: 0rem;
 }
 
 @media (min-width: 960px) {
@@ -68,7 +74,7 @@
   .paletteColor {
     height: 170px; /* Large devices */
   }
-  .MuiAccordionSummary-content h3 {
+  .dropDownTitle {
     font-size: 15px;
   }
   .paletteColor {
@@ -80,8 +86,11 @@
   .paletteColor {
     height: 120px; /* Smaller devices */
   }
-  .MuiAccordionSummary-content h3 {
+  .dropDownTitle {
     font-size: 12px;
-    margin: 0 0.5rem 0 0;
+  }
+
+  .timeStamp {
+    text-align: right;
   }
 }

@@ -348,15 +348,16 @@ function SavedPalettes({
               id={`panel${index}a-header`}
               className="dropDownTitleContainer"
               sx={{
-                justifyContent: "space-between",
+                padding: { xs: "0 8px", sm: "0 16px" },
               }}
             >
-              <h3>
-                {palette.name}
-                {palette.themeName !== "" && ` - ${palette.themeName} theme`}
-              </h3>
-
-              <h3>{formatDate(palette.timestamp)}</h3>
+              <div className="dropDownTitle">
+                <h3 className="paletteNameTheme">
+                  {palette.name}
+                  {palette.themeName !== "" && ` - ${palette.themeName} theme`}
+                </h3>
+                <h3 className="timeStamp">{formatDate(palette.timestamp)}</h3>
+              </div>
             </AccordionSummary>
             <AccordionDetails>
               <PaletteDisplay
