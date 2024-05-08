@@ -6,13 +6,15 @@ class Palette {
     colors,
     combinations,
     id = Date.now().toString(),
-    timestamp = new Date().toISOString()
+    timestamp = new Date().toISOString(),
+    themeName = ""
   ) {
     this.id = id;
     this.name = name;
     this.colors = this.assignColorNames(colors); // Assign names to each color
     this.combinations = combinations;
     this.timestamp = timestamp;
+    this.themeName = themeName;
   }
 
   // Assigns a name to each color based on its hex code using findNearestColor

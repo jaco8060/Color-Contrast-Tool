@@ -44,6 +44,14 @@
   margin: 0;
   font-size: 12px;
 }
+.editPaletteContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.editPaletteLabel {
+  margin: 0;
+}
 
 @media (min-width: 960px) {
   .paletteColor {

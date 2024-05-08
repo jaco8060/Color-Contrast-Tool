@@ -82,7 +82,6 @@ function App() {
 
   //clear the colours state array
   const resetColours = () => {
-    console.log("Resetting colours...");
     setColours([]);
     setSelectedCombinations([]);
     setStickyIndex(null);
@@ -172,7 +171,7 @@ function App() {
       } else {
         newCombinations.delete(combinationKey);
       }
-      console.log(newCombinations);
+
       return Array.from(newCombinations);
     });
   };
