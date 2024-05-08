@@ -1,7 +1,7 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Checkbox, Rating, Tooltip } from "@mui/material";
-import { memo, useState } from "react";
+import { memo } from "react";
 import tinycolor from "tinycolor2";
 import "./DisplayCombinations.css";
 
@@ -98,7 +98,7 @@ function DisplayCombinations({
 }) {
   return (
     <div className="colourSectionContainer">
-      {colours.map((bgColor, index) =>
+      {colours.map((bgColor) =>
         colours
           .filter((textColor) => textColor !== bgColor)
           .map((textColor, textIndex) => (
