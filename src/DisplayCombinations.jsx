@@ -1,7 +1,7 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Checkbox, Rating, Tooltip } from "@mui/material";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import tinycolor from "tinycolor2";
 import "./DisplayCombinations.css";
 
@@ -95,24 +95,35 @@ function DisplayCombinations({
   colours,
   onToggleCombination,
   selectedCombinations,
+  showOnlyReadable,
 }) {
-  return (
-    <div className="colourSectionContainer">
-      {colours.map((bgColor) =>
+  const filteredCombinations = useMemo(() => {
+    return colours
+      .flatMap((bgColor) =>
         colours
           .filter((textColor) => textColor !== bgColor)
-          .map((textColor, textIndex) => (
-            <DisplayCombinationItem
-              key={textIndex}
-              bgColor={bgColor}
-              textColor={textColor}
-              isSelected={selectedCombinations.includes(
-                `${bgColor}-${textColor}`
-              )}
-              onToggleCombination={onToggleCombination}
-            />
-          ))
-      )}
+          .map((textColor) => ({
+            bgColor,
+            textColor,
+            isSelected: selectedCombinations.includes(
+              `${bgColor}-${textColor}`
+            ),
+            readability: tinycolor.readability(bgColor, textColor).toFixed(2),
+          }))
+      )
+      .filter((comb) => !showOnlyReadable || comb.readability >= 4.5);
+  }, [colours, selectedCombinations, showOnlyReadable]);
+  return (
+    <div className="colourSectionContainer">
+      {filteredCombinations.map((item, index) => (
+        <DisplayCombinationItem
+          key={index}
+          bgColor={item.bgColor}
+          textColor={item.textColor}
+          isSelected={item.isSelected}
+          onToggleCombination={onToggleCombination}
+        />
+      ))}
     </div>
   );
 }

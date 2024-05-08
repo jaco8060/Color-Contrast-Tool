@@ -28,8 +28,13 @@ export default function ColorContrastTool() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
+  const [showOnlyReadable, setShowOnlyReadable] = useState(false);
 
   let paletteName = "";
+
+  const toggleReadableFilter = () => {
+    setShowOnlyReadable(!showOnlyReadable);
+  };
 
   const toggleSticky = (index) => {
     if (stickyIndex === index) {
@@ -64,6 +69,7 @@ export default function ColorContrastTool() {
     setColours([]);
     setSelectedCombinations([]);
     setStickyIndex(null);
+    setShowOnlyReadable(false);
   };
 
   const addColour = (newColour) => {
@@ -312,11 +318,19 @@ export default function ColorContrastTool() {
                   {snackbarMessage}
                 </Alert>
               </Snackbar>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={toggleReadableFilter}
+              >
+                {showOnlyReadable ? "Show All" : "Show Readable Only"}
+              </Button>
             </div>
             <DisplayCombinations
               colours={colours.map((col) => col.hex)}
               onToggleCombination={handleToggleCombination}
               selectedCombinations={selectedCombinations}
+              showOnlyReadable={showOnlyReadable}
             />
           </>
         )}
