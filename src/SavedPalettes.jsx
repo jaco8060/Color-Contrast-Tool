@@ -11,13 +11,22 @@ import {
   Snackbar,
   TextField,
   Tooltip,
+  Switch,
+  FormControlLabel,
+  styled,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import { useEffect, useState } from "react";
 import Palette from "./Palette"; // Import the Palette class
 import "./SavedPalettes.css";
 import { generateTheme } from "./ThemeGen";
-//return white or black based on background color
+import {
+  findNearestColor,
+  findNearestTailwindColor,
+} from "./assets/colors.jsx";
+import tailwindLogo from "./assets/tailwind-logo.svg";
+
+// Return white or black based on background color
 function getContrastYIQ(hexcolor) {
   hexcolor = hexcolor.replace("#", "");
   const r = parseInt(hexcolor.substr(0, 2), 16);
@@ -26,6 +35,7 @@ function getContrastYIQ(hexcolor) {
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
   return yiq >= 128 ? "black" : "white";
 }
+
 function formatDate(dateString) {
   const date = new Date(dateString);
   const months = [
@@ -52,6 +62,7 @@ function formatDate(dateString) {
 
   return `${month}-${day}-${year} ${formattedHour}:${minutes}${ampm}`;
 }
+
 const CooldownButton = ({ generateThemeName }) => {
   const [isCooldown, setIsCooldown] = useState(false);
   const [cooldownTime, setCooldownTime] = useState(10); // Cooldown time in seconds
@@ -70,8 +81,6 @@ const CooldownButton = ({ generateThemeName }) => {
         });
       }, 1000);
     }
-
-    // Cleanup timer on component unmount or if the cooldown ends early
     return () => clearInterval(timer);
   }, [isCooldown]);
 
@@ -98,12 +107,73 @@ const CooldownButton = ({ generateThemeName }) => {
     </Tooltip>
   );
 };
+
+// Custom Tailwind Switch with SVG Logo
+const TailwindSwitch = styled(Switch)(({ theme }) => ({
+  width: 62,
+  height: 34,
+  padding: 7,
+  "& .MuiSwitch-switchBase": {
+    margin: 1,
+    padding: 0,
+    transform: "translateX(6px)",
+    "&.Mui-checked": {
+      color: "#fff",
+      transform: "translateX(22px)",
+      "& .MuiSwitch-thumb::before": {
+        content: "''",
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        left: 0,
+        top: 0,
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundImage: `url(${tailwindLogo})`,
+        backgroundSize: "80%",
+        filter: "none", // Full opacity when checked
+      },
+      "& + .MuiSwitch-track": {
+        opacity: 1,
+        backgroundColor: "#bae6fd", // Tailwind blue-200
+      },
+    },
+  },
+  "& .MuiSwitch-thumb": {
+    backgroundColor: theme.palette.grey[300], // Light gray when unchecked
+    width: 32,
+    height: 32,
+    "&::before": {
+      content: "''",
+      position: "absolute",
+      width: "100%",
+      height: "100%",
+      left: 0,
+      top: 0,
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      backgroundImage: `url(${tailwindLogo})`, // Show logo when unchecked
+      backgroundSize: "80%",
+      filter: "opacity(0.3)", // Dimmed when unchecked
+    },
+  },
+  "& .MuiSwitch-switchBase.Mui-checked .MuiSwitch-thumb": {
+    backgroundColor: "#38bdf8", // Tailwind blue-400 when checked
+  },
+  "& .MuiSwitch-track": {
+    opacity: 1,
+    backgroundColor: theme.palette.grey[400],
+    borderRadius: 20 / 2,
+  },
+}));
+
 function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [currentThemeName, setCurrentThemeName] = useState(
     palette.themeName || ""
   );
+  const [showTailwind, setShowTailwind] = useState(false);
 
   const handleCopyColor = (color) => {
     navigator.clipboard.writeText(color).then(() => {
@@ -132,52 +202,89 @@ function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
+
+  // Compute displayCombinations based on showTailwind
+  const displayCombinations = showTailwind
+    ? palette.combinations.map((combo) => {
+        const [bgColor, textColor] = combo.split("-");
+        const nearestBg = findNearestTailwindColor(bgColor).hex;
+        const nearestText = findNearestTailwindColor(textColor).hex;
+        return `${nearestBg}-${nearestText}`;
+      })
+    : palette.combinations;
+
   return (
     <div>
-      <strong>Color palette:</strong>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 1,
+        }}
+      >
+        <strong>Color palette:</strong>
+        <Tooltip title="Toggle to show Tailwind colors" placement="top" arrow>
+          <FormControlLabel
+            control={
+              <TailwindSwitch
+                checked={showTailwind}
+                onChange={() => setShowTailwind(!showTailwind)}
+                aria-label="Toggle Tailwind colors"
+              />
+            }
+            label="Tailwind"
+            labelPlacement="start"
+          />
+        </Tooltip>
+      </Box>
       <Grid container spacing={1} mb={2}>
-        {palette.colors.map((color, index) => (
-          <Grid xs={6} sm={4} md={3} key={index} mt={1}>
-            <Tooltip title="Click to copy color" placement="top" arrow>
-              <div
-                style={{
-                  width: "100%",
-                  backgroundColor: color.hex,
-                  color: getContrastYIQ(color.hex),
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  position: "relative",
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.opacity = "0.75")}
-                onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
-                onClick={() => handleCopyColor(color.hex)}
-                className="paletteColor"
-              >
-                <div className="colorGroup">
-                  <IconButton
-                    className="copyIcon"
-                    sx={{ color: "inherit", display: "none", padding: "0" }}
-                  >
-                    <ContentCopyIcon />
-                  </IconButton>
-                  <h3>{color.hex}</h3>
-                  <h4>{color.name}</h4>
+        {palette.colors.map((color, index) => {
+          const displayColor = showTailwind
+            ? findNearestTailwindColor(color.hex)
+            : { name: color.name, hex: color.hex };
+          return (
+            <Grid xs={6} sm={4} md={3} key={index} mt={1}>
+              <Tooltip title="Click to copy color" placement="top" arrow>
+                <div
+                  style={{
+                    width: "100%",
+                    backgroundColor: displayColor.hex,
+                    color: getContrastYIQ(displayColor.hex),
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    position: "relative",
+                  }}
+                  onMouseOver={(e) => (e.currentTarget.style.opacity = "0.75")}
+                  onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
+                  onClick={() => handleCopyColor(displayColor.hex)}
+                  className="paletteColor"
+                >
+                  <div className="colorGroup">
+                    <IconButton
+                      className="copyIcon"
+                      sx={{ color: "inherit", display: "none", padding: "0" }}
+                    >
+                      <ContentCopyIcon />
+                    </IconButton>
+                    <h3>{displayColor.hex}</h3>
+                    <h4>{displayColor.name}</h4>
+                  </div>
                 </div>
-              </div>
-            </Tooltip>
-          </Grid>
-        ))}
+              </Tooltip>
+            </Grid>
+          );
+        })}
       </Grid>
 
       <div className="colorCombos">
         <strong>Selected Pairings:</strong>
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 1, mb: 2 }}>
-          {palette.combinations === null ||
-          palette.combinations.length === 0 ? (
+          {displayCombinations === null || displayCombinations.length === 0 ? (
             <h5>No selected pairings</h5>
           ) : (
-            palette.combinations.map((combo, index) => {
+            displayCombinations.map((combo, index) => {
               const [bgColor, textColor] = combo.split("-");
               return (
                 <Box key={index} sx={{ padding: 0 }}>
@@ -244,7 +351,6 @@ function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
         >
           <Box sx={{ display: "flex", gap: 2, flexDirection: "column" }}>
             <h5 className="editPaletteLabel">Edit palette theme</h5>
-
             <CooldownButton generateThemeName={generateThemeName} />
             <TextField
               id="outlined-required"
@@ -253,7 +359,6 @@ function PaletteDisplay({ palette, onUpdatePaletteName, onUpdateThemeName }) {
               onChange={handleThemeNameChange}
               sx={{ width: "250px" }}
             />
-
             <Button
               variant="outlined"
               color="success"
@@ -332,7 +437,7 @@ function SavedPalettes({
   return (
     <div className="savedPalettesContainer">
       <h2 className="subheadingTitle">Saved Palettes</h2>
-      {palettes.length === 0 ? (
+      {palettes.length == 0 ? (
         <p>No palettes saved yet.</p>
       ) : (
         [...palettes].reverse().map((palette, index) => (
