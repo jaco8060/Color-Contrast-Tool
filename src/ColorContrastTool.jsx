@@ -10,7 +10,6 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-
 import { useMemo, useState } from "react";
 import tinycolor from "tinycolor2";
 import "./App.css";
@@ -18,133 +17,32 @@ import { ColourInput } from "./ColourInput.jsx";
 import { DisplayCombinations } from "./DisplayCombinations.jsx";
 import ImageColorExtractor from "./ImageColorExtractor.jsx";
 import Palette from "./Palette.jsx";
-import SavedPalettes from "./SavedPalettes.jsx"; // Ensure the path is correct
-export default function ColorContrastTool() {
-  const [colours, setColours] = useState([]);
-  const [stickyIndex, setStickyIndex] = useState(null); // New state to track sticky form
-  const [selectedCombinations, setSelectedCombinations] = useState([]); //new state to save selected combinations in a list
-  const [lastPaletteSave, setLastPaletteSave] = useState(Date.now());
-  const [currentPaletteIndex, setCurrentPaletteIndex] = useState(null);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+export default function ColorContrastTool({
+  colours,
+  stickyIndex,
+  selectedCombinations,
+  addColour,
+  addPaletteColour,
+  addColoursFromPalette,
+  updateColour,
+  removeColour,
+  moveColourUp,
+  moveColourDown,
+  resetColours,
+  toggleSticky,
+  setSelectedCombinations,
+  triggerPaletteSaveUpdate,
+  handleSnackbarClose,
+  snackbarOpen,
+  snackbarMessage,
+}) {
   const [openDialog, setOpenDialog] = useState(false);
   const [showOnlyReadable, setShowOnlyReadable] = useState(false);
-
-  let paletteName = "";
+  let paletteName = ""; // Used in the save dialog form
 
   const toggleReadableFilter = () => {
     setShowOnlyReadable(!showOnlyReadable);
-  };
-
-  const toggleSticky = (index) => {
-    if (stickyIndex === index) {
-      setStickyIndex(null); // Unstick if the same index is clicked again
-    } else {
-      setStickyIndex(index); // Stick the new index
-    }
-  };
-
-  const addColoursFromPalette = (palette) => {
-    const newColours = palette.filter(
-      (color) => !colours.some((col) => col.hex === color)
-    );
-    setColours((prevColours) => [
-      ...prevColours,
-      ...newColours.map((hex) => ({ hex, id: new Date().getTime() + hex })),
-    ]);
-  };
-  const addPaletteColour = (color) => {
-    if (!colours.some((colour) => colour.hex === color)) {
-      setColours((prevColours) => [
-        ...prevColours,
-        { hex: color, id: new Date().getTime() + color },
-      ]);
-    } else {
-      alert("This color has already been added.");
-    }
-  };
-
-  //clear the colours state array
-  const resetColours = () => {
-    setColours([]);
-    setSelectedCombinations([]);
-    setStickyIndex(null);
-    setShowOnlyReadable(false);
-  };
-
-  const addColour = (newColour) => {
-    if (
-      !colours.some((colour) => colour.hex === newColour.hex) &&
-      /^#[0-9A-F]{6}$/i.test(newColour.hex)
-    ) {
-      setColours([
-        ...colours,
-        { hex: newColour.hex, id: new Date().getTime() },
-      ]);
-    } else {
-      alert("Please select a valid color that has not been added yet.");
-    }
-  };
-
-  const moveColourUp = (index) => {
-    if (index === 0) return; // Can't move the first element up
-    const newColours = [...colours];
-    [newColours[index], newColours[index - 1]] = [
-      newColours[index - 1],
-      newColours[index],
-    ];
-    setColours(newColours);
-  };
-
-  const moveColourDown = (index) => {
-    if (index === colours.length - 1) return; // Can't move the last element down
-    const newColours = [...colours];
-    [newColours[index], newColours[index + 1]] = [
-      newColours[index + 1],
-      newColours[index],
-    ];
-    setColours(newColours);
-  };
-
-  const updateColour = (id, newHex) => {
-    // Find the old color value that is being updated.
-    const oldHex = colours.find((colour) => colour.id === id)?.hex;
-
-    // Update the colours array with the new hex value.
-    setColours(
-      colours.map((colour) =>
-        colour.id === id ? { ...colour, hex: newHex } : colour
-      )
-    );
-
-    // Remove any selected combinations that include the old color
-    if (oldHex) {
-      setSelectedCombinations(
-        selectedCombinations.filter((combination) => {
-          const [bgColor, textColor] = combination.split("-");
-          return bgColor !== oldHex && textColor !== oldHex;
-        })
-      );
-    }
-  };
-
-  const removeColour = (id, index) => {
-    const colorToBeRemoved = colours.find((colour) => colour.id === id)?.hex;
-    if (!colorToBeRemoved) return;
-
-    if (stickyIndex === index) {
-      setStickyIndex(null); // Unstick if the deleted color input is sticky
-    }
-    // Filter out the color from the colours list
-    setColours(colours.filter((colour) => colour.id !== id));
-
-    // Also remove any combinations that involve this color
-    setSelectedCombinations(
-      selectedCombinations.filter((combination) => {
-        const [bgColor, textColor] = combination.split("-");
-        return bgColor !== colorToBeRemoved && textColor !== colorToBeRemoved;
-      })
-    );
   };
 
   const handleToggleCombination = (bgColor, textColor, isChecked) => {
@@ -156,12 +54,11 @@ export default function ColorContrastTool() {
       } else {
         newCombinations.delete(combinationKey);
       }
-
       return Array.from(newCombinations);
     });
   };
 
-  // Memoize the calculation of all combinations
+  // Generate all possible unique color pair combinations (bg-text)
   const allCombinations = useMemo(() => {
     return colours.flatMap((col1) =>
       colours
@@ -170,78 +67,85 @@ export default function ColorContrastTool() {
     );
   }, [colours]);
 
-  // Memoize check if all combinations are currently selected
+  // Check if all *currently visible* combinations are selected
   const allCombinationsSelected = useMemo(() => {
     const visibleCombinations = showOnlyReadable
       ? allCombinations.filter((combination) => {
           const [bgColor, textColor] = combination.split("-");
           const readability = tinycolor.readability(bgColor, textColor);
-          return readability >= 4.5;
+          return readability >= 4.5; // WCAG AA minimum
         })
       : allCombinations;
+    // Handle case where no combinations are visible (e.g., only 1 color, or filter yields none)
+    if (visibleCombinations.length === 0) return false;
 
     return visibleCombinations.every((combination) =>
       selectedCombinations.includes(combination)
     );
   }, [selectedCombinations, allCombinations, showOnlyReadable]);
 
-  // Function to toggle all combinations
+  // Selects or deselects all combinations based on the current filter (all or readable)
   const toggleAllCombinations = () => {
-    if (allCombinationsSelected) {
-      setSelectedCombinations([]);
-    } else {
-      if (showOnlyReadable) {
-        // Select only readable combinations
-        const readableCombinations = colours.flatMap((col1) =>
-          colours
-            .filter((col2) => col1.hex !== col2.hex)
-            .map((col2) => `${col1.hex}-${col2.hex}`)
-            .filter((combination) => {
-              const [bgColor, textColor] = combination.split("-");
-              const readability = tinycolor.readability(bgColor, textColor);
-              return readability >= 4.5;
-            })
-        );
-        setSelectedCombinations(readableCombinations);
-      } else {
-        // Select all combinations
-        setSelectedCombinations(allCombinations);
-      }
-    }
-  };
+    const baseCombinations = colours.flatMap((col1) =>
+      colours
+        .filter((col2) => col1.hex !== col2.hex)
+        .map((col2) => ({
+          key: `${col1.hex}-${col2.hex}`,
+          bgColor: col1.hex,
+          textColor: col2.hex,
+        }))
+    );
 
-  // Load a palette from saved palettes
-  const loadPalette = (id) => {
-    const loadedPalette = Palette.load(id);
-    if (loadedPalette) {
-      setColours(loadedPalette.colors);
-      setSelectedCombinations(loadedPalette.combinations);
-      setCurrentPaletteIndex(loadedPalette.id);
+    // Filter combinations based on the readability toggle if active
+    const targetCombinations = showOnlyReadable
+      ? baseCombinations.filter(
+          (comb) => tinycolor.readability(comb.bgColor, comb.textColor) >= 4.5
+        )
+      : baseCombinations;
+
+    const targetKeys = targetCombinations.map((comb) => comb.key);
+
+    // Check if all target combinations are currently selected
+    const allCurrentlySelected =
+      targetKeys.length > 0 &&
+      targetKeys.every((key) => selectedCombinations.includes(key));
+
+    if (allCurrentlySelected) {
+      // Deselect all target combinations
+      setSelectedCombinations((prev) =>
+        prev.filter((key) => !targetKeys.includes(key))
+      );
+    } else {
+      // Select all target combinations (adding to existing selections)
+      setSelectedCombinations((prev) =>
+        Array.from(new Set([...prev, ...targetKeys]))
+      );
     }
-  };
-  // Function to handle closing the snackbar
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
   };
 
   const handleOpenDialog = () => {
+    if (colours.length < 1) {
+      // TODO: Replace alert with snackbar notification via App state
+      alert("Add at least one color before saving a palette.");
+      return;
+    }
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
-  // Function to save a new palette
+
   const handleSavePalette = () => {
     const newPalette = new Palette(paletteName, colours, selectedCombinations);
     newPalette.save();
-    setLastPaletteSave(Date.now());
-    setSnackbarMessage("Palette saved successfully!");
-    setSnackbarOpen(true);
+    triggerPaletteSaveUpdate(); // Notify App to potentially update SavedPalettes
     handleCloseDialog();
   };
+
   return (
     <>
+      <div id="home"></div> {/* Anchor for scrolling */}
       <div className="headerContainer">
         <h1 className="title">Color Contrast Tool</h1>
       </div>
@@ -251,6 +155,7 @@ export default function ColorContrastTool() {
           onAddPalette={addColoursFromPalette}
         />
 
+        {/* Render individual color input components */}
         {colours.map((colour, index) => (
           <ColourInput
             label={`Color ${index + 1}:`}
@@ -265,8 +170,10 @@ export default function ColorContrastTool() {
           />
         ))}
 
+        {/* Render the input for adding a new color and the reset button */}
         <ColourInput addColour={addColour} onReset={() => resetColours()} />
 
+        {/* Render color pairings section only if there are 2+ colors */}
         {colours.length > 1 && (
           <>
             <h2 className="subheadingTitle">Color Pairings</h2>
@@ -275,18 +182,24 @@ export default function ColorContrastTool() {
                 variant="contained"
                 color="primary"
                 onClick={toggleAllCombinations}
+                disabled={colours.length < 2}
               >
                 {allCombinationsSelected ? "Unselect All" : "Select All"}
               </Button>
               <Tooltip title="Save palette and selected pairings" arrow>
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={handleOpenDialog}
-                >
-                  Save Palette
-                </Button>
+                {/* Wrap button in span for tooltip to work when disabled */}
+                <span>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={handleOpenDialog}
+                    disabled={colours.length < 1}
+                  >
+                    Save Palette
+                  </Button>
+                </span>
               </Tooltip>
+              {/* Dialog for naming and saving the palette */}
               <Dialog
                 open={openDialog}
                 onClose={handleCloseDialog}
@@ -296,11 +209,8 @@ export default function ColorContrastTool() {
                     event.preventDefault();
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
-                    formJson.paletteName
-                      ? (paletteName = formJson.paletteName)
-                      : (paletteName = "Untitled");
+                    paletteName = formJson.paletteName || "Untitled";
                     handleSavePalette();
-                    handleCloseDialog();
                   },
                 }}
               >
@@ -318,8 +228,7 @@ export default function ColorContrastTool() {
                     type="text"
                     fullWidth
                     variant="standard"
-                    // value={paletteName}
-                    // onChange={(e) => setPaletteName(e.target.value)}
+                    defaultValue=""
                   />
                 </DialogContent>
                 <DialogActions>
@@ -328,6 +237,7 @@ export default function ColorContrastTool() {
                 </DialogActions>
               </Dialog>
 
+              {/* Snackbar for notifications (controlled by App) */}
               <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={3000}
@@ -336,36 +246,31 @@ export default function ColorContrastTool() {
               >
                 <Alert
                   onClose={handleSnackbarClose}
-                  severity="success"
+                  severity="success" // Severity might need to be dynamic based on message
                   sx={{ width: "100%" }}
                 >
                   {snackbarMessage}
                 </Alert>
               </Snackbar>
+              {/* Button to toggle filtering by readability */}
               <Button
                 variant="contained"
                 color="secondary"
                 onClick={toggleReadableFilter}
+                disabled={colours.length < 2}
               >
                 {showOnlyReadable ? "Show All" : "Show Readable Only"}
               </Button>
             </div>
+            {/* Component to display the color combinations */}
             <DisplayCombinations
-              colours={colours.map((col) => col.hex)}
+              colours={colours.map((col) => col.hex)} // Pass only hex values
               onToggleCombination={handleToggleCombination}
               selectedCombinations={selectedCombinations}
               showOnlyReadable={showOnlyReadable}
             />
           </>
         )}
-        <div id="saved-palettes">
-          <SavedPalettes
-            lastUpdate={lastPaletteSave}
-            onLoadPalette={loadPalette}
-            setCurrentPaletteIndex={setCurrentPaletteIndex}
-            currentPaletteIndex={currentPaletteIndex}
-          />
-        </div>
       </div>
     </>
   );
