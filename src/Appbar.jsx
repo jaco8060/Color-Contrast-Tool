@@ -50,7 +50,7 @@ function ResponsiveAppBar({ themeMode, toggleTheme }) {
               display: { xs: "none", md: "flex" },
               fontFamily: "Montserrat",
               fontWeight: 700,
-              letterSpacing: ".3rem",
+              letterSpacing: "0.05rem",
               color: "inherit",
               textDecoration: "none",
             }}
