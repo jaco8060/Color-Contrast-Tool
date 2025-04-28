@@ -6,6 +6,7 @@ import ResponsiveAppBar from "./Appbar.jsx";
 import ColorContrastToolContent from "./ColorContrastTool.jsx"; // Renamed for clarity with Skeleton
 import ColorContrastToolSkeleton from "./ColorContrastToolSkeleton.jsx";
 import Palette from "./Palette.jsx";
+import PaletteChooser from "./PaletteChooser.jsx"; // Import the new component
 import SavedPalettes from "./SavedPalettes.jsx";
 import SavedPalettesSkeleton from "./SavedPalettesSkeleton.jsx";
 
@@ -62,6 +63,10 @@ function App() {
       ...prev,
       ...newColours.map((hex) => ({ hex, id: Date.now() + hex })),
     ]);
+    // Optionally navigate back to home or show a success message
+    navigate("/"); // Navigate to home after adding colors
+    setSnackbarMessage("Colors added from chosen palette.");
+    setSnackbarOpen(true);
   };
 
   const addPaletteColour = (color) => {
@@ -218,6 +223,13 @@ function App() {
                 currentPaletteIndex={currentPaletteIndex}
               />
             )
+          }
+        />
+        {/* New Route */}
+        <Route
+          path="/palette-chooser"
+          element={
+            <PaletteChooser addColoursFromPalette={addColoursFromPalette} />
           }
         />
       </Routes>

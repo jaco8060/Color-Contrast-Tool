@@ -20,7 +20,7 @@ import { Link as RouterLink } from "react-router-dom";
 const pages = [
   { name: "Home", path: "/" },
   { name: "Saved Palettes", path: "/saved-palettes" },
-  // { name: "How to use", path: "/how-to-use" }, // TODO: Add path when page is ready
+  { name: "Palette Chooser", path: "/palette-chooser" }, // New page
 ];
 
 function ResponsiveAppBar({ themeMode, toggleTheme }) {
